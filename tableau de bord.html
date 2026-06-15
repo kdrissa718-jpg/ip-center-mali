@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IP Center Mali - Dashboards</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
+body{background:#0f172a;color:#fff;}
+header{padding:15px;background:#1e293b;display:flex;justify-content:space-between;align-items:center;}
+header h1{font-size:18px;}
+.container{display:flex;min-height:100vh;}
+.sidebar{width:220px;background:#111827;padding:20px;}
+.sidebar button{width:100%;padding:10px;margin-bottom:10px;background:#1f2937;color:#fff;border:none;cursor:pointer;border-radius:6px;}
+.sidebar button.active{background:#2563eb;}
+.main{flex:1;padding:20px;}
+.card{background:#1e293b;padding:15px;border-radius:10px;margin-bottom:15px;}
+input,textarea{width:100%;padding:8px;margin-top:5px;margin-bottom:10px;border-radius:5px;border:none;}
+button.action{background:#2563eb;color:#fff;padding:10px;border:none;border-radius:6px;cursor:pointer;}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;}
+.course{background:#111827;padding:10px;border-radius:8px;}
+small{color:#9ca3af;}
+</style>
+</head>
+<body>
+
+<header>
+<h1>IP Center Mali - Espace Plateforme</h1>
+<div>Bienvenue</div>
+</header>
+
+<div class="container">
+
+<div class="sidebar">
+<button class="active" onclick="show('teacher')">Professeur</button>
+<button onclick="show('student')">Étudiant</button>
+</div>
+
+<div class="main">
+
+<!-- PROFESSEUR -->
+<div id="teacher">
+<div class="card">
+<h2>Dashboard Professeur</h2>
+<small>Publier cours (PDF, vidéos, images, audio)</small>
+</div>
+
+<div class="card">
+<h3>Ajouter un cours</h3>
+<input type="text" placeholder="Titre du cours">
+<textarea placeholder="Description"></textarea>
+<input type="file">
+<button class="action">Publier le cours</button>
+</div>
+
+<div class="card">
+<h3>Mes cours</h3>
+<div class="grid">
+<div class="course">Maths Niveau 1</div>
+<div class="course">Réseaux Informatique</div>
+</div>
+</div>
+
+<div class="card">
+<h3>Statistiques</h3>
+<p>Étudiants abonnés: 120</p>
+<p>Cours vendus: 45</p>
+</div>
+</div>
+
+<!-- ETUDIANT -->
+<div id="student" style="display:none;">
+<div class="card">
+<h2>Espace Étudiant</h2>
+<small>Acheter cours et poser des questions</small>
+</div>
+
+<div class="card">
+<h3>Cours disponibles</h3>
+<div class="grid">
+<div class="course">
+Maths Niveau 1
+<br><small>2000 FCFA</small>
+<br><button class="action">Acheter</button>
+</div>
+<div class="course">
+Réseaux Informatique
+<br><small>3000 FCFA</small>
+<br><button class="action">Acheter</button>
+</div>
+</div>
+</div>
+
+<div class="card">
+<h3>Poser une question</h3>
+<textarea placeholder="Votre question..."></textarea>
+<button class="action">Envoyer</button>
+</div>
+</div>
+
+</div>
+</div>
+
+<script>
+function show(role){
+ document.getElementById('teacher').style.display = role==='teacher'?'block':'none';
+ document.getElementById('student').style.display = role==='student'?'block':'none';
+
+ let btns = document.querySelectorAll('.sidebar button');
+ btns.forEach(b=>b.classList.remove('active'));
+ if(role==='teacher') btns[0].classList.add('active');
+ else btns[1].classList.add('active');
+}
+</script>
+<footer>
+    <div class="footer-content">
+        <div class="footer-logo">
+            <a href="index.html"><img src="6026e96b-b829-48f0-ae0b-506f5b40e573.png" alt="IP Center Mali"></a>
+            <p>
+                Centre de Formation Professionnelle
+                & Informatique
+            </p>
+        </div>
+
+        <div class="footer">
+            <h2>IP CENTER MALI</h2>
+            <p>
+                📞 +223 92 48 87 30<br>
+                📞 +223 95 50 60 62<br>
+                <a href="mailto:kdrissa718@gmail.com">✉ kdrissa718@gmail.com</a>
+            </p>
+        </div>
+
+        <div class="footer">
+            <h2>Suivez-nous</h2>
+            <div class="socials">
+                <a href="https://www.facebook.com/ipcentermali" target="_blank" aria-label="Facebook IP Center Mali">
+                    <i class="fab fa-facebook"></i>
+                </a>
+                <a href="https://www.instagram.com/ipcentermali" target="_blank" aria-label="Instagram IP Center Mali">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://www.linkedin.com/company/ipcentermali" target="_blank" aria-label="LinkedIn IP Center Mali">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="https://www.youtube.com/channel/UCN7vC5JZ5X5X5X5X5X5X5X5" target="_blank" aria-label="YouTube IP Center Mali">
+                    <i class="fab fa-youtube"></i>
+                </a>
+                <a href="https://twitter.com/ipcentermali" target="_blank" aria-label="Twitter IP Center Mali">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="https://www.tiktok.com/@ipcentermali" target="_blank" aria-label="TikTok IP Center Mali">
+                    <i class="fab fa-tiktok"></i>
+                </a>
+            </div>
+            <h2>Connexion</h2>
+            <p>
+                <a href="login.html" class="btn">Se connecter</a>
+            </p>
+        </div>
+    </div>
+    <div class="copyright">
+        © 2026 IP Center Mali - Tous droits réservés.
+    </div>
+</footer>
+
+<a href="https://wa.me/22392488730" class="whatsapp" target="_blank" aria-label="WhatsApp IP Center Mali">
+    <div class="whatsapp-icon">
+        <span class="btn-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M20.52 3.48C18.19 1.15 14.94 0 12 0 5.37 0 .01 5.37 .01 12c0 2.12.56 4.18 1.62 5.99L0 24l6.35-1.66c1.75 1.04 3.76 1.6 5.84 1.6 6.63 0 12-5.37 12-12 0-2.94-1.15-6.19-3.48-8.52zM12 21.82c-1.88 0-3.71-.53-5.29-1.53l-.38-.23-3.77.99.99-3.68-.25-.39C2.7 14.49 2.18 13.27 2.18 12c0-5.43 4.39-9.82 9.82-9.82 2.62 0 5.08 1.02 6.93 2.87 1.85 1.85 2.87 4.31 2.87 6.93 0 5.43-4.39 9.82-9.82 9.82zm5.47-7.83c-.28-.14-1.65-.81-1.91-.9-.26-.1-.45-.14-.64.14-.19.28-.75.9-.92 1.08-.17.19-.35.21-.64.07-.28-.14-1.18-.43-2.24-1.38-.83-.74-1.39-1.66-1.55-1.94-.16-.28-.02-.43.12-.57.12-.12.28-.31.42-.47.14-.16.19-.28.28-.47.09-.19.05-.35-.02-.49-.07-.14-.64-1.55-.88-2.13-.23-.56-.46-.48-.64-.49-.17-.01-.37-.01-.57-.01-.19 0-.49.07-.75.35-.26.28-1 1-1 2.42s1.03 2.81 1.17 3 .2.49.4.79.68.8 1.16 1.3c.5.5.88.68 1.17.76.29.08.55.07.76.04.23-.03.72-.29 1.38-.88.48-.41.84-.9.94-1.12.1-.23.1-.43.07-.47-.03-.05-.1-.08-.21-.14z"/></svg></span>
+    </div>
+</a>
+
+</body>
+</html>

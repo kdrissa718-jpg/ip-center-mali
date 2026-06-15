@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IP Center Mali - Espace Professeur</title>
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="css/index.css">
+<link rel="stylesheet" href="css/professeur.css">
+</head>
+
+
+<body>
+
+<header>
+<h1>Espace Professeur - IP Center Mali</h1>
+<div>Bienvenue Professeur</div>
+</header>
+
+
+
+<div class="container">
+
+<div class="sidebar">
+<button class="active" onclick="show('upload')">Ajouter cours</button>
+<button onclick="show('my')">Mes cours</button>
+<button onclick="show('stats')">Statistiques</button>
+<button onclick="window.location.href='Index.html'">Se déconnecter</button>
+</div>
+
+<div class="main">
+
+<!-- UPLOAD COURS -->
+<div id="upload">
+<div class="card">
+<h2>Publier un cours</h2>
+</div>
+
+
+<input type="text" id="title" placeholder="Titre du cours">
+
+<textarea id="description" placeholder="Description du cours"></textarea>
+
+<input type="file" id="image" accept="image/*">
+
+<input type="number" id="price" placeholder="Prix du cours">
+
+<input type="text" id="teacher" placeholder="Nom du professeur">
+
+<input type="file" id="video" accept="video/*">
+
+<input type="file" id="file">
+
+<button type="button" class="action" id="publishBtn">Publier</button>
+    
+</div>
+</div>
+
+<!-- MES COURS -->
+<div id="my" style="display:none;">
+<div class="card">
+<h2>Mes cours publiés</h2>
+</div>
+<div class="grid">
+<div class="course">Maths Niveau 1</div>
+<div class="course">Réseaux Informatiques</div>
+</div>
+</div>
+
+<!-- STATS -->
+<div id="stats" style="display:none;">
+<div class="card">
+<h2>Statistiques</h2>
+</div>
+<div class="card">
+<p>👨‍🎓 Étudiants abonnés : 120</p>
+<p>📚 Cours vendus : 45</p>
+<p>💰 Revenus : 150 000 FCFA</p>
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+const supabaseUrl = "https://snwgqnmuxdgozaxhhpxv.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNud2dxbm11eGRnb3pheGhocHh2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2Nzg3ODUsImV4cCI6MjA5NDI1NDc4NX0.MJyZehNzBYZndgCoqHEjS2XPfmC0ftsLnu9gPpHA3zg";
+
+const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+console.log("Supabase connecté :", supabaseClient);
+
+const STORAGE_BUCKETS = {
+    images: "course-images",
+    files: "course-files",
+    videos: "course-videos"
+};
+</script> 
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const btn = document.getElementById("publishBtn");
+
+    if (!btn) {
+        console.log("❌ Bouton introuvable");
+        return;
+    }
+
+    btn.addEventListener("click", async function () {
+
+        console.log("✔ Clique détecté");
+
+        const title = document.getElementById("title").value.trim();
+        const description = document.getElementById("description").value.trim();
+        const price = document.getElementById("price").value.trim();
+        const teacher = document.getElementById("teacher").value.trim();
+
+        const file = document.getElementById("file").files[0];
+        const image = document.getElementById("image").files[0];
+        const video = document.getElementById("video") ? document.getElementById("video").files[0] : null;
+        if (!title || !description || !price || !teacher) {
+            alert("Tous les champs texte sont requis ❌");
+            return;
+        }
+
+        if (!image || (!file && !video)) {
+            alert("Image et contenu du cours requis ❌");
+            return;
+        }
+
+        const courseContent = video || file;
+        const courseContentBucket = video ? STORAGE_BUCKETS.videos : STORAGE_BUCKETS.files;
+
+        console.log("✔ fichiers OK");
+
+        try {
+
+            // =====================
+            // UPLOAD IMAGE
+            // =====================
+
+            console.log("Début upload image");
+
+const imageName = `${Date.now()}_${image.name}`;
+
+const { data: imgData, error: imgError } = await supabaseClient
+    .storage
+    .from(STORAGE_BUCKETS.images)
+    .upload(imageName, image);
+
+if (imgError) throw imgError;
+
+const { data: imgUrlData } = supabaseClient
+    .storage
+    .from(STORAGE_BUCKETS.images)
+    .getPublicUrl(imageName);
+
+const imageURL = imgUrlData.publicUrl;
+
+console.log("Image uploadée :", imageURL);
+            // =====================
+            // UPLOAD COURSE CONTENT
+            // =====================
+
+            console.log("Début upload contenu");
+
+const contentName = `${Date.now()}_${courseContent.name}`;
+
+const { data: contentData, error: contentError } = await supabaseClient
+    .storage
+    .from(courseContentBucket)
+    .upload(contentName, courseContent);
+
+if (contentError) throw contentError;
+
+const { data: contentUrlData } = supabaseClient
+    .storage
+    .from(courseContentBucket)
+    .getPublicUrl(contentName);
+
+const contentURL = contentUrlData.publicUrl;
+
+console.log("Contenu uploadé :", contentURL);
+
+            // =====================
+            // INSERT DATABASE
+            // =====================
+
+            console.log("Insertion dans courses...");
+
+
+            const { error: dbError } = await supabaseClient
+    .from("courses")
+    .insert([{
+        title,
+        description,
+        price,
+        teacher,
+        image_url: imageURL,
+        file_url: contentURL,
+        file_name: courseContent.name
+    }]);
+
+            if (dbError) throw dbError;
+
+            alert("✔ Cours publié avec succès");
+
+        } catch (err) {
+            console.error("Erreur :", err);
+            alert("Erreur : " + err.message);
+        }
+
+    });
+
+});
+
+</script>
+<script>
+console.log("Cours enregistré");
+</script>
+<footer>
+    <div class="footer-content">
+        <div class="footer-logo">
+            <a href="index.html"><img src="6026e96b-b829-48f0-ae0b-506f5b40e573.png" alt="IP Center Mali"></a>
+            <p>
+                Centre de Formation Professionnelle
+                & Informatique
+            </p>
+        </div>
+
+        <div class="footer">
+            <h2>IP CENTER MALI</h2>
+            <p>
+                📞 +223 92 48 87 30<br>
+                📞 +223 95 50 60 62<br>
+                <a href="mailto:kdrissa718@gmail.com">✉ kdrissa718@gmail.com</a>
+            </p>
+        </div>
+
+        <div class="footer">
+            <h2>Suivez-nous</h2>
+            <div class="socials">
+                <a href="https://www.facebook.com/ipcentermali" target="_blank" aria-label="Facebook IP Center Mali">
+                    <i class="fab fa-facebook"></i>
+                </a>
+                <a href="https://www.instagram.com/ipcentermali" target="_blank" aria-label="Instagram IP Center Mali">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://www.linkedin.com/company/ipcentermali" target="_blank" aria-label="LinkedIn IP Center Mali">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="https://www.youtube.com/channel/UCN7vC5JZ5X5X5X5X5X5X5X5" target="_blank" aria-label="YouTube IP Center Mali">
+                    <i class="fab fa-youtube"></i>
+                </a>
+                <a href="https://twitter.com/ipcentermali" target="_blank" aria-label="Twitter IP Center Mali">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="https://www.tiktok.com/@ipcentermali" target="_blank" aria-label="TikTok IP Center Mali">
+                    <i class="fab fa-tiktok"></i>
+                </a>
+            </div>
+            <h2>Connexion</h2>
+            <p>
+                <a href="login.html" class="btn">Se connecter</a>
+            </p>
+        </div>
+    </div>
+    <div class="copyright">
+        © 2026 IP Center Mali - Tous droits réservés.
+    </div>
+</footer>
+
+<a href="https://wa.me/22392488730" class="whatsapp" target="_blank" aria-label="WhatsApp IP Center Mali">
+    <div class="whatsapp-icon">
+        <span class="btn-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M20.52 3.48C18.19 1.15 14.94 0 12 0 5.37 0 .01 5.37 .01 12c0 2.12.56 4.18 1.62 5.99L0 24l6.35-1.66c1.75 1.04 3.76 1.6 5.84 1.6 6.63 0 12-5.37 12-12 0-2.94-1.15-6.19-3.48-8.52zM12 21.82c-1.88 0-3.71-.53-5.29-1.53l-.38-.23-3.77.99.99-3.68-.25-.39C2.7 14.49 2.18 13.27 2.18 12c0-5.43 4.39-9.82 9.82-9.82 2.62 0 5.08 1.02 6.93 2.87 1.85 1.85 2.87 4.31 2.87 6.93 0 5.43-4.39 9.82-9.82 9.82zm5.47-7.83c-.28-.14-1.65-.81-1.91-.9-.26-.1-.45-.14-.64.14-.19.28-.75.9-.92 1.08-.17.19-.35.21-.64.07-.28-.14-1.18-.43-2.24-1.38-.83-.74-1.39-1.66-1.55-1.94-.16-.28-.02-.43.12-.57.12-.12.28-.31.42-.47.14-.16.19-.28.28-.47.09-.19.05-.35-.02-.49-.07-.14-.64-1.55-.88-2.13-.23-.56-.46-.48-.64-.49-.17-.01-.37-.01-.57-.01-.19 0-.49.07-.75.35-.26.28-1 1-1 2.42s1.03 2.81 1.17 3 .2.49.4.79.68.8 1.16 1.3c.5.5.88.68 1.17.76.29.08.55.07.76.04.23-.03.72-.29 1.38-.88.48-.41.84-.9.94-1.12.1-.23.1-.43.07-.47-.03-.05-.1-.08-.21-.14z"/></svg></span>
+    </div>
+</a>
+
+</body>
+</html>

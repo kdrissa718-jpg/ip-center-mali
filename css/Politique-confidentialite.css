@@ -1,0 +1,313 @@
+/* =========================================
+   FOND ANIME
+========================================= */
+
+body{
+    margin:0;
+    font-family:'Poppins',sans-serif;
+    background:linear-gradient(
+        -45deg,
+        #0f172a,
+        #1e3a8a,
+        #2563eb,
+        #0ea5e9
+    );
+    background-size:400% 400%;
+    animation:bgMove 15s ease infinite;
+    min-height:100vh;
+}
+
+@keyframes bgMove{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+}
+
+/* =========================================
+   SECTION
+========================================= */
+
+.section{
+    padding:100px 20px;
+}
+
+/* =========================================
+   CONTENEUR PRINCIPAL
+========================================= */
+
+.policy-container{
+    max-width:1000px;
+    margin:auto;
+
+    background:rgba(255,255,255,0.12);
+    backdrop-filter:blur(20px);
+
+    border:1px solid rgba(255,255,255,0.2);
+
+    border-radius:30px;
+
+    padding:50px;
+
+    box-shadow:
+    0 25px 60px rgba(0,0,0,.35);
+
+    animation:
+    containerReveal 1.8s cubic-bezier(.17,.89,.32,1.49);
+}
+
+/* =========================================
+   LABEL
+========================================= */
+
+.policy-label{
+    display:inline-block;
+
+    padding:10px 20px;
+
+    background:#2563eb;
+
+    color:white;
+
+    border-radius:40px;
+
+    font-size:13px;
+
+    font-weight:800;
+
+    letter-spacing:3px;
+
+    text-transform:uppercase;
+
+    animation:slideLeft 1.2s ease;
+}
+
+/* =========================================
+   TITRE
+========================================= */
+
+.policy-title{
+    color:rgb(10, 10, 10);
+
+    font-size:clamp(2.5rem,5vw,4rem);
+
+    margin-top:25px;
+
+    margin-bottom:20px;
+
+    animation:zoomRotate 1.5s ease;
+}
+
+/* =========================================
+   INTRO
+========================================= */
+
+.policy-intro{
+    color:#080809;
+
+    font-size:18px;
+
+    line-height:1.9;
+
+    animation:fadeScale 2s ease;
+}
+
+/* =========================================
+   BLOCS
+========================================= */
+
+.policy-section{
+    margin-top:30px;
+
+    padding:25px;
+
+    background:rgba(255,255,255,0.08);
+
+    border-left:6px solid #38bdf8;
+
+    border-radius:18px;
+
+    transition:.5s;
+
+    opacity:0;
+
+    animation:sectionReveal 1.2s forwards;
+}
+
+.policy-section:nth-child(1){animation-delay:.4s;}
+.policy-section:nth-child(2){animation-delay:.8s;}
+.policy-section:nth-child(3){animation-delay:1.2s;}
+.policy-section:nth-child(4){animation-delay:1.6s;}
+.policy-section:nth-child(5){animation-delay:2s;}
+
+.policy-section:hover{
+
+    transform:
+    translateY(-10px)
+    scale(1.03);
+
+    background:rgba(255,255,255,0.15);
+
+    box-shadow:
+    0 20px 40px rgba(0,0,0,.25);
+}
+
+/* =========================================
+   TITRES
+========================================= */
+
+.policy-section h2{
+    color:#100c0c;
+    margin-bottom:12px;
+    font-size:24px;
+}
+
+/* =========================================
+   PARAGRAPHES
+========================================= */
+
+.policy-section p{
+    color:#05090e;
+    line-height:1.9;
+}
+
+/* =========================================
+   LIENS
+========================================= */
+
+.policy-section a{
+    color:#38bdf8;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.policy-section a:hover{
+    color:#6eb0c1;
+}
+
+/* =========================================
+   ANIMATIONS
+========================================= */
+
+@keyframes containerReveal{
+
+    from{
+        opacity:0;
+        transform:
+        perspective(1000px)
+        rotateX(50deg)
+        translateY(300px);
+    }
+
+    to{
+        opacity:1;
+        transform:
+        perspective(1000px)
+        rotateX(0deg)
+        translateY(0);
+    }
+}
+
+@keyframes slideLeft{
+
+    from{
+        opacity:0;
+        transform:translateX(-200px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateX(0);
+    }
+}
+
+@keyframes zoomRotate{
+
+    from{
+        opacity:0;
+        transform:
+        scale(.3)
+        rotate(-25deg);
+    }
+
+    to{
+        opacity:1;
+        transform:
+        scale(1)
+        rotate(0);
+    }
+}
+
+@keyframes fadeScale{
+
+    from{
+        opacity:0;
+        transform:scale(.5);
+    }
+
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+}
+
+@keyframes sectionReveal{
+
+    from{
+        opacity:0;
+
+        transform:
+        translateY(200px)
+        rotateX(90deg)
+        scale(.5);
+    }
+
+    to{
+        opacity:1;
+
+        transform:
+        translateY(0)
+        rotateX(0)
+        scale(1);
+    }
+}
+
+/* =========================================
+   EFFET FLOTTANT
+========================================= */
+
+.policy-container{
+    animation:
+    containerReveal 1.8s ease,
+    floating 6s infinite ease-in-out;
+}
+
+@keyframes floating{
+
+    0%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-10px);
+    }
+
+    100%{
+        transform:translateY(0);
+    }
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media(max-width:768px){
+
+    .policy-container{
+        padding:25px;
+    }
+
+    .policy-title{
+        font-size:2rem;
+    }
+
+}
