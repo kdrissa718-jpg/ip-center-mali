@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nos formations - IP Center Mali</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/formations.css">
+  <link rel="stylesheet" href="css/modalite_playlist.css">
+</head>
+<body>
+  <header>
+     
+        <div class="header-inner">
+            <div class="logo">
+           <a href="index.html"><img src="6026e96b-b829-48f0-ae0b-506f5b40e573.png" alt="IP Center Mali"></a>
+            </div>
+            <nav>
+            <a href="index.html">Accueil</a>
+            <a href="service.html">Services</a>
+            <a href="formations.html">Formations</a>
+            <a href="bibliotheque.html">Bibliothèque</a>
+            <a href="inscription.html">Inscription</a> 
+            <a href="login.html" class="nav-login">Connexion</a>
+            <a href="contact.html">Contact</a>
+            
+            </nav>
+        </div>
+    
+    <h1>Nos formations</h1>
+    <p>Développez vos compétences avec IP Center Mali</p>
+  </header>
+
+  <main>
+    <div class="recherche-formations">
+      <label for="recherche-cours">Rechercher un cours</label>
+      <input type="search" id="recherche-cours" placeholder="Nom ou description du cours..." autocomplete="off">
+    </div>
+    <div id="message">Chargement des formations...</div>
+    <div id="formations"></div>
+  </main>
+
+
+
+ <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/scriptsupabase.js"></script>
+<script src="js/modalite_playlist.js"></script>
+<script src="js/formations.js"></script>
+</body>
+</html>

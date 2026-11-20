@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#123c72">
+    <title>IP Center Mali - Dashboard Admin</title>
+
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/dashboard_admin.css">
+    <link rel="stylesheet" href="css/modalite_playlist.css">
+
+    <style>
+        [hidden] {
+            display: none !important;
+        }
+
+        .upload-help {
+            display: block;
+            margin: 5px 0 12px;
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+
+        .upload-status {
+            margin: 10px 0;
+            font-size: 0.95rem;
+            overflow-wrap: anywhere;
+        }
+
+        .file-input {
+            display: block;
+            width: 100%;
+            max-width: 100%;
+            margin: 8px 0;
+        }
+
+        .formation-form label {
+            display: block;
+            margin-top: 12px;
+        }
+
+        .formation-form input,
+        .formation-form textarea,
+        .formation-form select {
+            box-sizing: border-box;
+            max-width: 100%;
+        }
+
+        .formation-admin-card img {
+            display: block;
+            width: 100%;
+            max-height: 220px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .resource-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 12px 0;
+        }
+
+        .resource-links a {
+            overflow-wrap: anywhere;
+        }
+
+        .danger {
+            color: #b91c1c;
+        }
+    </style>
+</head>
+
+<body data-required-role="admin">
+<div class="admin-layout">
+
+    <aside class="admin-sidebar">
+        <a class="brand" href="index.html" aria-label="Retour à l'accueil">
+            <img src="6026e96b-b829-48f0-ae0b-506f5b40e573.png"
+                 alt="IP Center Mali">
+            <span>Admin Center</span>
+        </a>
+
+        <nav class="admin-nav" aria-label="Navigation administrateur">
+            <button class="nav-item active" data-section="overview" type="button">
+                <i class="fas fa-chart-line"></i>
+                <span>Vue globale</span>
+            </button>
+
+            <button class="nav-item" data-section="users" type="button">
+                <i class="fas fa-users-gear"></i>
+                <span>Utilisateurs</span>
+            </button>
+
+            <button class="nav-item" data-section="courses" type="button">
+                <i class="fas fa-book-open"></i>
+                <span>Cours et formations</span>
+            </button>
+
+            <button class="nav-item" data-section="learning-paths" type="button">
+                <i class="fas fa-route"></i>
+                <span>Parcours de formation</span>
+            </button>
+
+            <button class="nav-item" data-section="library" type="button">
+                <i class="fas fa-book-bookmark"></i>
+                <span>Bibliothèque</span>
+            </button>
+
+            <button class="nav-item" data-section="permissions" type="button">
+                <i class="fas fa-shield-halved"></i>
+                <span>Autorisations</span>
+            </button>
+
+            <button class="nav-item" data-section="messages" type="button">
+                <i class="fas fa-inbox"></i>
+                <span>Messages</span>
+            </button>
+
+            <button class="nav-item" data-section="settings" type="button">
+                <i class="fas fa-sliders"></i>
+                <span>Paramètres</span>
+            </button>
+        </nav>
+
+        <a href="login.html"
+           class="logout-link logout-btn"
+           data-action="logout">
+            <span>⎋</span> Se déconnecter
+        </a>
+    </aside>
+
+    <main class="admin-main">
+
+        <header class="admin-topbar">
+            <div>
+                <p class="eyebrow">IP Center Mali</p>
+                <h1>Dashboard administrateur</h1>
+            </div>
+
+            <div class="admin-profile">
+                <span id="adminName">Administrateur</span>
+                <strong>A</strong>
+            </div>
+        </header>
+
+        <section class="access-alert" id="accessAlert">
+            <i class="fas fa-triangle-exclamation"></i>
+            <strong>Accès administrateur requis</strong>
+            <p id="accessAlertMessage">
+                Vérification de votre session administrateur...
+            </p>
+            <a href="login.html">Retour à la connexion</a>
+        </section>
+
+        <!-- VUE GLOBALE -->
+        <section class="dashboard-section active" id="overview">
+            <div class="stats-grid">
+                <article class="stat-card">
+                    <span><i class="fas fa-users"></i></span>
+                    <p>Utilisateurs</p>
+                    <strong id="statUsers">0</strong>
+                </article>
+
+                <article class="stat-card">
+                    <span><i class="fas fa-user-graduate"></i></span>
+                    <p>Étudiants</p>
+                    <strong id="statStudents">0</strong>
+                </article>
+
+                <article class="stat-card">
+                    <span><i class="fas fa-chalkboard-user"></i></span>
+                    <p>Professeurs</p>
+                    <strong id="statTeachers">0</strong>
+                </article>
+
+                <article class="stat-card">
+                    <span><i class="fas fa-book"></i></span>
+                    <p>Cours publiés</p>
+                    <strong id="statCourses">0</strong>
+                </article>
+            </div>
+
+            <div class="panel-grid">
+                <article class="panel">
+                    <div class="panel-header">
+                        <h2>Activité récente</h2>
+                        <span>Dernières actions</span>
+                    </div>
+                    <div class="activity-list" id="activityList"></div>
+                </article>
+
+                <article class="panel">
+                    <div class="panel-header">
+                        <h2>État des autorisations</h2>
+                        <span>Rôles principaux</span>
+                    </div>
+                    <div class="role-summary" id="roleSummary"></div>
+                </article>
+            </div>
+        </section>
+
+        <!-- UTILISATEURS -->
+        <section class="dashboard-section" id="users">
+            <div class="section-header">
+                <div>
+                    <p class="eyebrow">Gestion</p>
+                    <h2>Utilisateurs et rôles</h2>
+                </div>
+
+                <button class="primary-btn" type="button" id="addUserBtn">
+                    <i class="fas fa-user-plus"></i> Ajouter
+                </button>
+            </div>
+
+            <div class="toolbar">
+                <label>
+                    <i class="fas fa-search"></i>
+                    <input id="userSearch" type="search"
+                           placeholder="Rechercher un nom, email ou rôle">
+                </label>
+
+                <select id="roleFilter" aria-label="Filtrer par rôle">
+                    <option value="all">Tous les rôles</option>
+                    <option value="admin">Admin</option>
+                    <option value="teacher">Professeur</option>
+                    <option value="student">Étudiant</option>
+                </select>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Email</th>
+                        <th>Rôle</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody id="usersTable"></tbody>
+                </table>
+            </div>
+
+            <p class="upload-help">
+                Les utilisateurs et les paramètres sont enregistrés dans Supabase.
+                L’invitation et la gestion des comptes Auth nécessitent le déploiement
+                de la fonction Edge admin-users.
+            </p>
+        </section>
+
+        <!-- COURS ET FORMATIONS -->
+        <section class="dashboard-section" id="courses">
+
+            <div class="section-header">
+                <div>
+                    <p class="eyebrow">Catalogue</p>
+                    <h2>Cours publiés</h2>
+                </div>
+
+                <button class="primary-btn" type="button" id="refreshCoursesBtn">
+                    <i class="fas fa-rotate"></i> Actualiser les cours
+                </button>
+            </div>
+
+            <div class="course-grid" id="adminCourses"></div>
+
+            <hr class="section-divider">
+
+            <div class="section-header">
+                <div>
+                    <p class="eyebrow">Supabase</p>
+                    <h2>Gestion des formations</h2>
+                    <p>Ajoute une formation et téléverse ses ressources.</p>
+                    <a class="primary-btn" href="gestion-parcours.html">
+                        Organiser les leçons et exercices
+                    </a>
+                </div>
+
+                <button class="primary-btn" type="button"
+                        id="refreshFormationsBtn">
+                    <i class="fas fa-rotate"></i> Actualiser
+                </button>
+            </div>
+
+            <form id="formationForm" class="formation-form">
+                <input type="hidden" id="formationId">
+
+                <label for="formationTitre">Titre de la formation *</label>
+                <input id="formationTitre" type="text" required
+                       maxlength="200"
+                       placeholder="Ex. CCNA 1">
+
+                <label for="formationCategorie">Catégorie de la formation *</label>
+                <select id="formationCategorie" name="categorie" required>
+                    <option value="">-- Choisir une catégorie --</option>
+                    <option value="Réseau informatique">Réseau informatique</option>
+                    <option value="Programmation informatique">Programmation informatique</option>
+                    <option value="Maintenance informatique">Maintenance informatique</option>
+                    <option value="Pack Office">Pack Office</option>
+                    <option value="Intelligence artificielle">Intelligence artificielle</option>
+                    <option value="Caméra de surveillance">Caméra de surveillance</option>
+                    <option value="Robotique">Robotique</option>
+                    <option value="Autres cours">Autres cours</option>
+                </select>
+
+                <label for="formationDescription">Description</label>
+                <textarea id="formationDescription" rows="4"
+                          placeholder="Objectifs et contenu de la formation"></textarea>
+
+                <div class="formation-fields">
+                    <div>
+                        <label for="formationPrix">Prix (FCFA) *</label>
+                        <input id="formationPrix" type="number"
+                               min="0" step="1" value="0" required>
+                    </div>
+
+                    <div>
+                        <label for="formationDuree">Durée</label>
+                        <input id="formationDuree" type="text"
+                               placeholder="Ex. 3 mois">
+                    </div>
+                </div>
+
+                <hr>
+
+                <h3><i class="fas fa-image"></i> Image de couverture</h3>
+
+                <label for="formationCouvertureFile">
+                    Téléverser une image depuis l'ordinateur
+                </label>
+                <input class="file-input" id="formationCouvertureFile"
+                       type="file"
+                       accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
+                <small class="upload-help">
+                    JPG, PNG ou WebP. Taille maximale : 5 Mo.
+                </small>
+
+                <label for="formationCouverture">Ou saisir le lien de l'image</label>
+                <input id="formationCouverture" type="url"
+                       placeholder="https://...">
+
+                <hr>
+
+                <h3><i class="fas fa-video"></i> Vidéo de formation</h3>
+
+                <label for="formationYoutube">Lien YouTube</label>
+                <input id="formationYoutube" type="url"
+                       placeholder="https://www.youtube.com/...">
+
+                <label for="formationVideoFile">
+                    Téléverser une vidéo depuis l'ordinateur
+                </label>
+                <input class="file-input" id="formationVideoFile"
+                       type="file"
+                       accept=".mp4,.webm,.mov,video/mp4,video/webm,video/quicktime">
+                <small class="upload-help">
+                    MP4, WebM ou MOV. Taille maximale prévue par ce formulaire :
+                    100 Mo. Les limites du projet Supabase s'appliquent également.
+                </small>
+
+                <label for="formationVideo">Ou lien vidéo direct</label>
+                <input id="formationVideo" type="url"
+                       placeholder="https://...">
+
+                <hr>
+
+                <h3><i class="fas fa-file-pdf"></i> Document PDF</h3>
+
+                <label for="formationPdfFile">
+                    Téléverser un PDF depuis l'ordinateur
+                </label>
+                <input class="file-input" id="formationPdfFile"
+                       type="file"
+                       accept=".pdf,application/pdf">
+                <small class="upload-help">
+                    PDF uniquement. Taille maximale : 20 Mo.
+                </small>
+
+                <label for="formationPdf">Ou saisir le lien du PDF</label>
+                <input id="formationPdf" type="url"
+                       placeholder="https://...">
+
+                <div class="formation-actions">
+                    <button type="submit" class="primary-btn"
+                            id="saveFormationBtn">
+                        <i class="fas fa-floppy-disk"></i>
+                        Enregistrer la formation
+                    </button>
+
+                    <button type="button" class="secondary-btn"
+                            id="cancelFormationBtn">
+                        Annuler
+                    </button>
+                </div>
+
+                <p id="formationFeedback"
+                   class="upload-status"
+                   role="status"
+                   aria-live="polite"></p>
+            </form>
+
+            <hr class="section-divider">
+
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>Formations enregistrées</h2>
+                </div>
+                <div id="formationsAdminList" class="course-grid"></div>
+            </div>
+        </section>
+
+        <!-- GESTION ET APERÇU DES PARCOURS -->
+        <section class="dashboard-section" id="learning-paths">
+            <div class="section-header">
+                <div>
+                    <p class="eyebrow">Leçons, exercices et suivi</p>
+                    <h2>Parcours de formation</h2>
+                    <p>Choisis une formation pour gérer ses étapes ou voir le parcours comme un étudiant.</p>
+                </div>
+            </div>
+            <div class="learning-path-tools">
+                <label for="adminLearningFormation">Formation</label>
+                <select id="adminLearningFormation">
+                    <option value="">Choisir une formation</option>
+                </select>
+                <div class="learning-path-actions">
+                    <a class="primary-btn" id="manageLearningPathLink" href="gestion-parcours.html" aria-disabled="true">
+                        <i class="fas fa-list-check" aria-hidden="true"></i>
+                        Gérer les leçons, exercices et corrections
+                    </a>
+                    <a class="secondary-btn" id="previewLearningPathLink" href="dashboard_admin.html" aria-disabled="true">
+                        <i class="fas fa-eye" aria-hidden="true"></i>
+                        Prévisualiser le parcours étudiant
+                    </a>
+                </div>
+                <p class="upload-status">L’aperçu administrateur est en lecture seule : il ne crée aucune progression étudiante.</p>
+            </div>
+        </section>
+
+        <!-- GESTION DE LA BIBLIOTHÈQUE -->
+        <section class="dashboard-section" id="library">
+            <div class="section-header">
+                <div>
+                    <p class="eyebrow">Ressources documentaires</p>
+                    <h2>Gestion de la bibliothèque</h2>
+                    <p>Ajoute des livres, documents et médias. Seules ces ressources sont affichées dans la bibliothèque publique.</p>
+                </div>
+                <button class="primary-btn" id="refreshAdminLibrary" type="button">
+                    <i class="fas fa-rotate" aria-hidden="true"></i> Actualiser
+                </button>
+            </div>
+
+            <form id="adminLibraryForm" class="admin-library-form">
+                <div class="admin-library-grid">
+                    <label>Titre *<input name="title" type="text" maxlength="180" required></label>
+                    <label>Auteur<input name="author" type="text" maxlength="120"></label>
+                    <label>Catégorie<input name="category" type="text" maxlength="80" placeholder="Ex. Informatique"></label>
+                    <label>Type de ressource *
+                        <select name="resource_type" required>
+                            <option value="PDF">PDF</option>
+                            <option value="Livre">Livre / guide</option>
+                            <option value="Lien">Lien externe</option>
+                            <option value="Audio">Audio</option>
+                            <option value="Vidéo">Vidéo</option>
+                        </select>
+                    </label>
+                    <label class="admin-library-wide">Description
+                        <textarea name="description" rows="3" maxlength="1200"></textarea>
+                    </label>
+                    <label class="admin-library-wide">Lien externe (facultatif)
+                        <input name="external_url" type="url" placeholder="https://...">
+                    </label>
+                    <label class="admin-library-wide">Fichier PDF, audio ou vidéo
+                        <input name="resource_file" type="file" accept=".pdf,application/pdf,audio/*,video/*">
+                        <small>PDF, audio ou vidéo, jusqu’à 100 Mo (selon les limites de stockage Supabase).</small>
+                    </label>
+                    <label class="admin-library-wide">Image de couverture
+                        <input name="cover_file" type="file" accept="image/jpeg,image/png,image/webp">
+                        <small>JPG, PNG ou WebP, maximum 5 Mo.</small>
+                    </label>
+                    <label class="admin-library-wide">Ou URL de couverture
+                        <input name="cover_url" type="url" placeholder="https://...">
+                    </label>
+                </div>
+                <div class="admin-library-actions">
+                    <button class="primary-btn" type="submit"><i class="fas fa-plus" aria-hidden="true"></i> Ajouter la ressource</button>
+                    <p id="adminLibraryFeedback" role="status" aria-live="polite"></p>
+                </div>
+            </form>
+
+            <div class="section-header admin-library-list-heading">
+                <h2>Ressources enregistrées</h2>
+            </div>
+            <div id="adminLibraryList" class="admin-library-list"></div>
+        </section>
+
+        <!-- AUTORISATIONS -->
+        <section class="dashboard-section" id="permissions">
+            <div class="section-header">
+                <div>
+                    <p class="eyebrow">Sécurité</p>
+                    <h2>Matrice des autorisations</h2>
+                </div>
+            </div>
+            <div class="permissions-grid" id="permissionsGrid"></div>
+        </section>
+
+        <!-- MESSAGES -->
+        <section class="dashboard-section" id="messages">
+            <div class="section-header">
+                <div>
+                    <p class="eyebrow">Support</p>
+                    <h2>Messages Contact</h2>
+                </div>
+                <button class="primary-btn" type="button" id="refreshContactMessages">
+                    <i class="fas fa-rotate" aria-hidden="true"></i> Actualiser les messages
+                </button>
+            </div>
+            <div class="message-list" id="messageList"></div>
+            <p class="upload-help">
+                Les messages envoyés depuis la page Contact sont enregistrés dans Supabase.
+            </p>
+
+            <hr class="section-divider">
+
+            <div class="section-header">
+                <div>
+                    <p class="eyebrow">Suivi pédagogique</p>
+                    <h2>Questions des étudiants</h2>
+                    <p>Les réponses envoyées ici seront visibles dans le dashboard de chaque étudiant.</p>
+                </div>
+                <button class="primary-btn" type="button" id="refreshStudentQuestionsAdmin">
+                    <i class="fas fa-rotate" aria-hidden="true"></i> Actualiser
+                </button>
+            </div>
+            <div class="student-question-list" id="studentQuestionsAdmin"></div>
+        </section>
+
+        <!-- PARAMÈTRES -->
+        <section class="dashboard-section" id="settings">
+            <div class="section-header">
+                <div>
+                    <p class="eyebrow">Configuration</p>
+                    <h2>Paramètres du site</h2>
+                </div>
+            </div>
+
+            <form class="settings-form" id="settingsForm">
+                <label>
+                    Nom du centre
+                    <input id="settingCentre" type="text"
+                           value="IP Center Mali">
+                </label>
+
+                <label>
+                    Email administratif
+                    <input id="settingEmail" type="email"
+                           value="kdrissa718@gmail.com">
+                </label>
+
+                <label>
+                    Téléphone principal
+                    <input id="settingTelephone" type="tel"
+                           value="+223 92 48 87 30">
+                </label>
+
+                <label class="toggle-row">
+                    <span>Validation manuelle des professeurs</span>
+                    <input id="settingValidation" type="checkbox" checked>
+                </label>
+
+                <label class="toggle-row">
+                    <span>Publication directe des cours admin</span>
+                    <input id="settingPublication" type="checkbox" checked>
+                </label>
+
+                <button class="primary-btn" type="submit">
+                    <i class="fas fa-floppy-disk"></i> Enregistrer
+                </button>
+
+                <p id="settingsFeedback" role="status" aria-live="polite"></p>
+            </form>
+        </section>
+
+    </main>
+</div>
+
+<!-- MODALE UTILISATEUR -->
+<div class="modal" id="userModal" hidden>
+    <form class="modal-card" id="userForm">
+        <button class="modal-close" type="button" id="closeModal"
+                aria-label="Fermer">
+            <i class="fas fa-xmark"></i>
+        </button>
+
+        <h2>Utilisateur</h2>
+
+        <label for="modalName">Nom complet</label>
+        <input id="modalName" type="text" required>
+
+        <label for="modalEmail">Email</label>
+        <input id="modalEmail" type="email" required>
+
+        <label for="modalRole">Rôle</label>
+        <select id="modalRole">
+            <option value="admin">Admin</option>
+            <option value="teacher">Professeur</option>
+            <option value="student">Étudiant</option>
+        </select>
+
+        <label for="modalStatus">Statut</label>
+        <select id="modalStatus">
+            <option value="Actif">Actif</option>
+            <option value="En attente">En attente</option>
+            <option value="Bloque">Bloqué</option>
+        </select>
+
+        <button class="primary-btn" type="submit">Enregistrer</button>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/scriptsupabase.js"></script>
+<script src="js/modalite_playlist.js"></script>
+<script src="js/auth-guard.js"></script>
+<script src="js/dashboard_admin.js"></script>
+<script src="js/admin_library.js"></script>
+
+</body>
+</html>

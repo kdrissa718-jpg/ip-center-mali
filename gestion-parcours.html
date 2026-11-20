@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#092b59">
+    <title>Gestion des parcours - IP Center Mali</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="css/gestion_parcours.css">
+</head>
+<body data-required-role="teacher-or-admin">
+    <header class="management-header">
+        <a id="managementBackLink" href="dashboard_admin.html">← Retour au tableau de bord</a>
+        <h1>Gestion des leçons et exercices</h1>
+    </header>
+
+    <main class="management-main">
+        <p id="managementFeedback" class="management-feedback" role="status" aria-live="polite">
+            Chargement des formations...
+        </p>
+
+        <section class="management-card">
+            <label for="formationSelect">Formation à organiser</label>
+            <select id="formationSelect" required>
+                <option value="">Chargement...</option>
+            </select>
+        </section>
+
+        <div class="management-grid">
+            <section class="management-card">
+                <h2>Ajouter une leçon</h2>
+                <p>Les leçons sont accessibles dans l’ordre et comportent au moins une question obligatoire.</p>
+                <form id="lessonForm">
+                    <label for="lessonTitle">Titre de la leçon</label>
+                    <input id="lessonTitle" name="title" type="text" maxlength="180" required>
+                    <label for="lessonContent">Contenu de la leçon</label>
+                    <textarea id="lessonContent" name="content" rows="7" maxlength="15000" required></textarea>
+                    <label for="lessonVideo">Lien vidéo (facultatif)</label>
+                    <input id="lessonVideo" name="video_url" type="url" placeholder="https://...">
+                    <button class="management-button" type="submit">Enregistrer la leçon</button>
+                </form>
+            </section>
+
+            <section class="management-card">
+                <h2>Ajouter une question</h2>
+                <p>Les réponses à choix sont corrigées automatiquement. Les réponses écrites sont envoyées au professeur ou à l’administration pour correction.</p>
+                <form id="questionForm">
+                    <label for="lessonSelect">Leçon concernée</label>
+                    <select id="lessonSelect" name="lesson_id" required>
+                        <option value="">Ajoutez d’abord une leçon</option>
+                    </select>
+                    <label for="questionPrompt">Énoncé</label>
+                    <textarea id="questionPrompt" name="prompt" rows="3" maxlength="2000" required></textarea>
+                    <label for="questionType">Type de réponse</label>
+                    <select id="questionType" name="question_type">
+                        <option value="single_choice">Choix unique</option>
+                        <option value="multiple_choice">Choix multiples</option>
+                        <option value="text">Réponse écrite</option>
+                    </select>
+                    <div id="choiceFields">
+                        <label for="questionOptions">Choix proposés (un par ligne, au moins deux)</label>
+                        <textarea id="questionOptions" rows="5" placeholder="Choix A&#10;Choix B&#10;Choix C"></textarea>
+                        <fieldset id="correctAnswerFields">
+                            <legend>Réponse(s) correcte(s)</legend>
+                            <p>Ajoutez les choix ci-dessus pour sélectionner la correction.</p>
+                        </fieldset>
+                    </div>
+                    <button class="management-button" type="submit">Enregistrer la question</button>
+                </form>
+            </section>
+        </div>
+
+        <section class="management-card">
+            <h2>Leçons enregistrées</h2>
+            <div id="lessonList" class="managed-lessons"></div>
+        </section>
+
+        <section class="management-card">
+            <h2>Réponses des étudiants</h2>
+            <div id="studentAnswers" class="managed-lessons"></div>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/scriptsupabase.js"></script>
+    <script src="js/auth-guard.js"></script>
+    <script src="js/gestion_parcours.js"></script>
+</body>
+</html>

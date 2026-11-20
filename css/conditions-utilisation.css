@@ -174,3 +174,30 @@ html {
 .terms-section:nth-child(5) {
     animation-delay: 1.6s;
 }
+
+.terms-container {
+    border-radius: 8px;
+    animation: none;
+}
+
+.terms-label,
+.terms-title,
+.terms-intro,
+.terms-section {
+    animation: none;
+}
+
+.terms-section {
+    opacity: 1;
+    transform: none;
+}
+
+@media (max-width: 700px) {
+    .terms-container {
+        padding: 28px 20px;
+    }
+
+    .terms-title {
+        font-size: 30px;
+    }
+}

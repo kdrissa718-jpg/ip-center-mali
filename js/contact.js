@@ -1,104 +1,167 @@
-// Contact messaging using localStorage (client-side)
-const STORAGE_KEY = 'ipcenter_messages';
+let messages = [];
+const conversationId = createConversationId();
 
-function loadMessages(){
-    try{
-        const s = localStorage.getItem(STORAGE_KEY);
-        return s? JSON.parse(s):[];
-    }catch(e){return []}
+function createConversationId() {
+    const bytes = new Uint8Array(16);
+    window.crypto.getRandomValues(bytes);
+    bytes[6] = (bytes[6] & 0x0f) | 0x40;
+    bytes[8] = (bytes[8] & 0x3f) | 0x80;
+    const hex = Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('');
+    return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
 }
 
-function saveMessages(arr){
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+function loadMessages() {
+    return messages;
+}
+
+function saveMessages(items) {
+    messages = items;
+}
+
+async function storeMessage(message) {
+    const client = window.supabaseClient;
+    if (!client) throw new Error('Client Supabase indisponible.');
+
+    const { error } = await client.from('contact_messages').insert({
+        conversation_id: conversationId,
+        sender: 'visitor',
+        message_type: message.type,
+        content: message.content,
+        sender_name: message.name || null,
+        sender_email: message.email || null,
+        sender_phone: message.phone || null,
+        subject: message.subject || null
+    });
+
+    if (error) throw error;
+
+    return {
+        id: null,
+        sender: 'user',
+        type: message.type,
+        content: message.content,
+        time: new Date().toISOString()
+    };
 }
 
 function renderMessages(){
     const list = document.getElementById('messages');
+    if (!list) return;
     list.innerHTML = '';
     const msgs = loadMessages();
-    msgs.forEach(m=>{
+    msgs.forEach((m) => {
         const div = document.createElement('div');
         div.className = 'bubble ' + (m.sender==='user'? 'user':'admin');
-        if(m.type==='text'){
-            div.innerHTML = `<div>${escapeHtml(m.content)}</div><div class="meta">${new Date(m.time).toLocaleString('fr-FR')}</div>`;
+        if(m.type === 'audio'){
+            const audio = document.createElement('audio');
+            audio.controls = true;
+            audio.src = m.content;
+            div.appendChild(audio);
         }
-        else if(m.type==='audio'){
-            div.innerHTML = `<audio controls src="${m.content}"></audio><div class="meta">${new Date(m.time).toLocaleString('fr-FR')}</div>`;
+        else {
+            const text = document.createElement('div');
+            text.textContent = m.content;
+            div.appendChild(text);
         }
+        const meta = document.createElement('div');
+        meta.className = 'meta';
+        meta.textContent = new Date(m.time).toLocaleString('fr-FR');
+        div.appendChild(meta);
         list.appendChild(div);
     });
-    // Auto-scroll to bottom
-    setTimeout(()=>{
+    setTimeout(() => {
         list.scrollTop = list.scrollHeight;
     }, 0);
 }
 
-function escapeHtml(s){
-    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-
-function sendText(){
+async function sendText() {
     const ta = document.getElementById('messageText');
     const v = ta.value.trim();
     if(!v) return;
-    
+
+    const savedMessage = await storeMessage({ type: 'text', content: v });
     const msgs = loadMessages();
-    msgs.push({
-        id:Date.now(),
-        sender:'user',
-        type:'text',
-        content:v,
-        time:Date.now()
-    });
+    msgs.push(savedMessage);
     saveMessages(msgs);
     renderMessages();
     ta.value='';
     ta.focus();
-    
-    simulateAdminReply(v);
 }
 
-function simulateAdminReply(userText){
-    setTimeout(()=>{
-        const msgs = loadMessages();
-        const replies = [
-            'Merci pour votre message. Nous vous répondrons sous peu.',
-            'Votre demande a bien été reçue. Notre équipe s\'en charge.',
-            'Merci de nous avoir contactés. Un agent vous répondra bientôt.',
-            'Nous avons noté votre message. Cordialement!'
-        ];
-        const randomReply = replies[Math.floor(Math.random() * replies.length)];
-        
-        msgs.push({
-            id:Date.now(),
-            sender:'admin',
-            type:'text',
-            content:randomReply,
-            time:Date.now()
-        });
-        saveMessages(msgs);
-        renderMessages();
-    }, 1200 + Math.random()*2000);
-}
+async function handleAudioFile(file) {
+    if (!file.type.startsWith('audio/') || file.size > 5 * 1024 * 1024) {
+        alert('Choisissez un fichier audio de 5 Mo maximum.');
+        return;
+    }
 
-// AUDIO upload
-function handleAudioFile(file){
     const reader = new FileReader();
-    reader.onload = function(e){
-        const data = e.target.result;
-        const msgs = loadMessages();
-        msgs.push({
-            id:Date.now(),
-            sender:'user',
-            type:'audio',
-            content:data,
-            time:Date.now()
-        });
-        saveMessages(msgs);
-        renderMessages();
-        simulateAdminReply('[message audio reçu]');
-    };
-    reader.readAsDataURL(file);
+    const data = await new Promise((resolve, reject) => {
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(new Error('Impossible de lire le fichier audio.'));
+        reader.readAsDataURL(file);
+    });
+    const savedMessage = await storeMessage({
+        type: 'audio',
+        content: String(data)
+    });
+    const msgs = loadMessages();
+    msgs.push(savedMessage);
+    saveMessages(msgs);
+    renderMessages();
+}
+
+function reportContactError(error) {
+    console.error('Envoi du message de contact impossible :', error);
+    alert('Impossible d’envoyer le message. Vérifiez la connexion et réessayez.');
+}
+
+function handleAudioSelection(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    handleAudioFile(file).catch(reportContactError).finally(() => {
+        event.target.value = '';
+    });
+}
+
+function reportFormError(error) {
+    console.error('Envoi du formulaire de contact impossible :', error);
+    alert('Impossible d’envoyer le formulaire. Vérifiez la connexion et réessayez.');
+}
+
+async function handleFormSubmit(e) {
+    e.preventDefault();
+    const form = e.target;
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const subject = document.getElementById('subject').value;
+    const message = document.getElementById('message').value.trim();
+
+    if(!name || !email || !phone || !subject || !message) return;
+
+    const savedMessage = await storeMessage({
+        type: 'contact',
+        content: message,
+        name,
+        email,
+        phone,
+        subject
+    });
+    const msgs = loadMessages();
+    msgs.push(savedMessage);
+    saveMessages(msgs);
+    renderMessages();
+    form.reset();
+
+    const btn = form.querySelector('.btn-submit');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-check"></i> Envoyé!';
+    btn.style.background = 'linear-gradient(135deg, #16a34a 0%, #22c55e 100%)';
+
+    setTimeout(() => {
+        btn.innerHTML = originalText;
+        btn.style.background = '';
+    }, 3000);
 }
 
 // Recording
@@ -119,7 +182,7 @@ async function startRecording(btn){
         
         mediaRecorder.onstop = ()=>{
             const blob = new Blob(recordedChunks,{type:'audio/webm'});
-            handleAudioFile(blob);
+            handleAudioFile(blob).catch(reportContactError);
             btn.classList.remove('recording');
             // Stop all tracks
             stream.getTracks().forEach(track => track.stop());
@@ -139,46 +202,6 @@ function stopRecording(){
     }
 }
 
-// Form submission
-function handleFormSubmit(e){
-    e.preventDefault();
-    const form = e.target;
-    const name = document.getElementById('name').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const subject = document.getElementById('subject').value;
-    const message = document.getElementById('message').value.trim();
-    
-    if(!name || !email || !subject || !message) return;
-    
-    // Store in localStorage
-    const msgs = loadMessages();
-    msgs.push({
-        id:Date.now(),
-        sender:'user',
-        type:'text',
-        content:`📋 Formulaire de contact\nNom: ${name}\nEmail: ${email}\nSujet: ${subject}\n\nMessage:\n${message}`,
-        time:Date.now()
-    });
-    saveMessages(msgs);
-    renderMessages();
-    
-    // Clear form
-    form.reset();
-    
-    // Show success message
-    const btn = form.querySelector('.btn-submit');
-    const originalText = btn.innerHTML;
-    btn.innerHTML = '<i class="fas fa-check"></i> Envoyé!';
-    btn.style.background = 'linear-gradient(135deg, #16a34a 0%, #22c55e 100%)';
-    
-    setTimeout(()=>{
-        btn.innerHTML = originalText;
-        btn.style.background = '';
-    }, 3000);
-    
-    simulateAdminReply(`Merci ${name}, nous avons bien reçu votre demande.`);
-}
-
 // Initialize
 window.addEventListener('DOMContentLoaded', ()=>{
     renderMessages();
@@ -189,17 +212,15 @@ window.addEventListener('DOMContentLoaded', ()=>{
     const attachAudio = document.getElementById('attachAudio');
     const recordBtn = document.getElementById('recordBtn');
     
-    sendBtn.addEventListener('click', sendText);
+    sendBtn.addEventListener('click', () => sendText().catch(reportContactError));
     messageText.addEventListener('keydown', (e)=>{
         if(e.key==='Enter' && !e.shiftKey){
             e.preventDefault();
-            sendText();
+            sendText().catch(reportContactError);
         }
     });
     
-    attachAudio.addEventListener('change', (e)=>{
-        if(e.target.files[0]) handleAudioFile(e.target.files[0]);
-    });
+    attachAudio.addEventListener('change', handleAudioSelection);
     
     recordBtn.addEventListener('mousedown', ()=> startRecording(recordBtn));
     recordBtn.addEventListener('mouseup', ()=> stopRecording());
@@ -209,6 +230,8 @@ window.addEventListener('DOMContentLoaded', ()=>{
     // Contact Form
     const contactForm = document.getElementById('contactForm');
     if(contactForm){
-        contactForm.addEventListener('submit', handleFormSubmit);
+        contactForm.addEventListener('submit', (event) => {
+            handleFormSubmit(event).catch(reportFormError);
+        });
     }
 });

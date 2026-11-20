@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#092b59">
+    <title>Mon parcours de formation - IP Center Mali</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/parcours_formation.css">
+    <link rel="stylesheet" href="css/modalite_playlist.css">
+</head>
+<body data-required-role="student">
+    <header class="learning-header">
+        <a href="dashboard_etudient.html" class="back-link">
+            <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Mon espace étudiant
+        </a>
+        <a href="index.html" aria-label="IP Center Mali, accueil">
+            <img src="6026e96b-b829-48f0-ae0b-506f5b40e573.png" alt="IP Center Mali">
+        </a>
+    </header>
+
+    <main class="learning-main">
+        <section class="learning-heading">
+            <span class="learning-eyebrow"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> Mon apprentissage</span>
+            <h1 id="formationTitle">Chargement de la formation...</h1>
+            <p id="formationDescription"></p>
+        </section>
+
+        <p id="learningFeedback" class="learning-feedback" role="status" aria-live="polite">
+            Vérification de votre inscription...
+        </p>
+
+        <div class="learning-layout">
+            <aside class="lesson-sidebar" aria-labelledby="lessonListTitle">
+                <h2 id="lessonListTitle">Étapes de la formation</h2>
+                <ol id="lessonList" class="lesson-list"></ol>
+            </aside>
+            <section id="lessonPanel" class="lesson-panel" aria-live="polite"></section>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/scriptsupabase.js"></script>
+    <script src="js/modalite_playlist.js"></script>
+    <script src="js/auth-guard.js"></script>
+    <script src="js/parcours_formation.js"></script>
+</body>
+</html>

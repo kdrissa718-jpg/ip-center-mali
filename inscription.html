@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IP Center Mali - Inscription</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/common.css">
         <link rel="stylesheet" href="css/inscription.css">
+    <link rel="stylesheet" href="css/scroll-animations.css">
 </head>
 <body>
     <header>
@@ -15,16 +16,17 @@
                 <a href="index.html"><img src="6026e96b-b829-48f0-ae0b-506f5b40e573.png" alt="IP Center Mali"></a>
             </div>
             <nav>
-                <a href="index.html">Accueil</a>
-                <a href="inscription.html" class="active">Inscription</a>
-                <a href="contact.html">Contact</a>
-                <a href="service.html">Services</a>
-                <a href="portfolio.html">Portfolio</a>
-                <a href="login.html" class="nav-login">Connexion</a>
+            <a href="index.html">Accueil</a>
+            <a href="service.html">Services</a>
+            <a href="formations.html">Formations</a>
+            <a href="bibliotheque.html">Bibliothèque</a>
+            <a href="inscription.html">Inscription</a> 
+            <a href="login.html" class="nav-login">Connexion</a>
+            <a href="contact.html">Contact</a>
+            
             </nav>
         </div>
     </header>
-
     <main class="section">
         <section class="registration-shell" aria-label="Formulaire d'inscription">
             <aside class="intro-panel">
@@ -48,8 +50,8 @@
                 </div>
 
                 <div class="role-select">
-                    <button type="button" class="role-btn active" onclick="showForm('student')">Étudiant</button>
-                    <button type="button" class="role-btn" onclick="showForm('teacher')">Professeur</button>
+                    <button type="button" class="role-btn active" data-role="student">Étudiant</button>
+                    <button type="button" class="role-btn" data-role="teacher">Professeur</button>
                 </div>
 
                 <form id="studentForm" class="active">
@@ -68,7 +70,10 @@
                         </div>
                         <div class="field">
                             <label for="studentPassword">Mot de passe</label>
-                            <input id="studentPassword" type="password" placeholder="Minimum 6 caractères" required>
+                            <div class="password-field">
+                                <input id="studentPassword" data-password-field type="password" placeholder="Minimum 6 caractères" required>
+                                <button class="password-toggle" type="button" data-password-toggle aria-controls="studentPassword" aria-label="Afficher le mot de passe" aria-pressed="false">Afficher</button>
+                            </div>
                         </div>
                         <div class="field full">
                             <label for="studentGoal">Objectif d'apprentissage</label>
@@ -98,7 +103,10 @@
                         </div>
                         <div class="field">
                             <label for="teacherPassword">Mot de passe</label>
-                            <input id="teacherPassword" type="password" placeholder="Minimum 6 caractères" required>
+                            <div class="password-field">
+                                <input id="teacherPassword" data-password-field type="password" placeholder="Minimum 6 caractères" required>
+                                <button class="password-toggle" type="button" data-password-toggle aria-controls="teacherPassword" aria-label="Afficher le mot de passe" aria-pressed="false">Afficher</button>
+                            </div>
                         </div>
                         <div class="field full">
                             <label for="teacherSpecialty">Spécialité</label>
@@ -119,113 +127,6 @@
         </section>
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="scriptsupabase.js"></script>
-
-    <script>
-        function showForm(role) {
-            const studentForm = document.getElementById("studentForm");
-            const teacherForm = document.getElementById("teacherForm");
-            const buttons = document.querySelectorAll(".role-btn");
-
-            buttons.forEach((btn) => btn.classList.remove("active"));
-
-            if (role === "student") {
-                studentForm.classList.add("active");
-                teacherForm.classList.remove("active");
-                buttons[0].classList.add("active");
-            } else {
-                teacherForm.classList.add("active");
-                studentForm.classList.remove("active");
-                buttons[1].classList.add("active");
-            }
-        }
-
-        document.getElementById("studentForm").addEventListener("submit", async (e) => {
-            e.preventDefault();
-
-            const name = document.querySelector("#studentForm input[type='text']").value;
-            const email = document.querySelector("#studentForm input[type='email']").value;
-            const password = document.querySelector("#studentForm input[type='password']").value;
-
-            try {
-                const { error } = await supabaseClient.auth.signUp({
-                    email,
-                    password,
-                    options: {
-                        data: {
-                            nom: name,
-                            role: "student"
-                        }
-                    }
-                });
-
-                if (error) {
-                    throw error;
-                }
-
-                alert("Compte étudiant créé avec succès.");
-                window.location.href = "dashboard_etudient.html";
-            } catch (err) {
-                console.error("Inscription étudiant échouée :", err);
-                alert(err.message || "Erreur lors de l'inscription. Vérifiez votre connexion réseau.");
-            }
-        });
-
-        document.getElementById("teacherForm").addEventListener("submit", async (e) => {
-            e.preventDefault();
-
-            const name = document.querySelector("#teacherForm input[type='text']").value;
-            const email = document.querySelector("#teacherForm input[type='email']").value;
-            const password = document.querySelector("#teacherForm input[type='password']").value;
-
-            try {
-                const { error } = await supabaseClient.auth.signUp({
-                    email,
-                    password,
-                    options: {
-                        data: {
-                            nom: name,
-                            role: "teacher"
-                        }
-                    }
-                });
-
-                if (error) {
-                    throw error;
-                }
-
-                alert("Compte professeur créé avec succès.");
-                window.location.href = "dashboard_professeur.html";
-            } catch (err) {
-                console.error("Inscription professeur échouée :", err);
-                alert(err.message || "Erreur lors de l'inscription. Vérifiez votre connexion réseau.");
-            }
-        });
-
-        async function login(email, password) {
-            const { data, error } = await supabaseClient.auth.signInWithPassword({
-                email,
-                password
-            });
-
-            if (error) {
-                alert(error.message);
-                return;
-            }
-
-            const user = data.user;
-            const role = user.user_metadata?.role;
-
-            if (role === "student") {
-                window.location.href = "dashboard_etudient.html";
-            } else if (role === "teacher") {
-                window.location.href = "dashboard_professeur.html";
-            } else {
-                alert("Rôle inconnu.");
-            }
-        }
-    </script>
 <footer>
     <div class="footer-content">
         <div class="footer-logo">
@@ -283,5 +184,14 @@
         <span class="btn-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M20.52 3.48C18.19 1.15 14.94 0 12 0 5.37 0 .01 5.37 .01 12c0 2.12.56 4.18 1.62 5.99L0 24l6.35-1.66c1.75 1.04 3.76 1.6 5.84 1.6 6.63 0 12-5.37 12-12 0-2.94-1.15-6.19-3.48-8.52zM12 21.82c-1.88 0-3.71-.53-5.29-1.53l-.38-.23-3.77.99.99-3.68-.25-.39C2.7 14.49 2.18 13.27 2.18 12c0-5.43 4.39-9.82 9.82-9.82 2.62 0 5.08 1.02 6.93 2.87 1.85 1.85 2.87 4.31 2.87 6.93 0 5.43-4.39 9.82-9.82 9.82zm5.47-7.83c-.28-.14-1.65-.81-1.91-.9-.26-.1-.45-.14-.64.14-.19.28-.75.9-.92 1.08-.17.19-.35.21-.64.07-.28-.14-1.18-.43-2.24-1.38-.83-.74-1.39-1.66-1.55-1.94-.16-.28-.02-.43.12-.57.12-.12.28-.31.42-.47.14-.16.19-.28.28-.47.09-.19.05-.35-.02-.49-.07-.14-.64-1.55-.88-2.13-.23-.56-.46-.48-.64-.49-.17-.01-.37-.01-.57-.01-.19 0-.49.07-.75.35-.26.28-1 1-1 2.42s1.03 2.81 1.17 3 .2.49.4.79.68.8 1.16 1.3c.5.5.88.68 1.17.76.29.08.55.07.76.04.23-.03.72-.29 1.38-.88.48-.41.84-.9.94-1.12.1-.23.1-.43.07-.47-.03-.05-.1-.08-.21-.14z"/></svg></span>
     </div>
 </a>
+    <script src="js/scroll-animations.js"></script>
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/scriptsupabase.js"></script>
+        <script src="js/password-visibility.js"></script>
+        <script src="js/inscription.js"></script>
+
 </body>
 </html>

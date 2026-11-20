@@ -6,8 +6,9 @@
     <title>Services - IP Center Mali</title>
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/service.css">
+    <link rel="stylesheet" href="css/scroll-animations.css">
 </head>
 <body class="services-page">
     <header>
@@ -17,11 +18,13 @@
             </div>
             <nav>
                 <a href="index.html">Accueil</a>
-                <a href="inscription.html">Inscription</a>
-                <a href="contact.html">Contact</a>
-                <a href="service.html">Services</a>
-                <a href="portfolio.html">Portfolio</a>
-                <a href="login.html" class="nav-login">Connexion</a>
+            <a href="service.html">Services</a>
+            <a href="formations.html">Formations</a>
+            <a href="bibliotheque.html">Bibliothèque</a>
+            <a href="inscription.html">Inscription</a> 
+            <a href="login.html" class="nav-login">Connexion</a>
+            <a href="contact.html">Contact</a>
+            
             </nav>
         </div>
     </header>
@@ -337,20 +340,7 @@
     </div>
 </a>
 
-<script>
-    const revealElements = document.querySelectorAll('.reveal');
-    const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('reveal-visible');
-                revealObserver.unobserve(entry.target);
-            }
-        });
-    }, {
-        threshold: 0.40
-    });
-
-    revealElements.forEach(el => revealObserver.observe(el));
-</script>
+    <script src="js/service.js"></script>
+    <script src="js/scroll-animations.js"></script>
 </body>
 </html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#092b59">
+    <title>Bibliothèque numérique - IP Center Mali</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="bibliotheque.css">
+</head>
+<body class="library-page">
+    <header class="library-header">
+        <div class="library-nav">
+            <a class="library-brand" href="index.html" aria-label="IP Center Mali, accueil">
+                <img src="6026e96b-b829-48f0-ae0b-506f5b40e573.png" alt="IP Center Mali">
+            </a>
+            <nav aria-label="Navigation principale">
+                <a href="index.html">Accueil</a>
+                <a href="service.html">Services</a>
+                <a href="formations.html">Formations</a>
+                <a href="bibliotheque.html" aria-current="page">Bibliothèque</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+            <a class="library-account" href="dashboard_etudient.html" id="accountLink">
+                <i class="fa-regular fa-user" aria-hidden="true"></i>
+                <span id="accountLabel">Mon espace</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="library-main">
+        <section class="library-hero">
+            <div class="library-hero-copy">
+                <span class="library-eyebrow"><i class="fa-solid fa-book-open" aria-hidden="true"></i> Votre espace de savoir</span>
+                <h1>La bibliothèque <span>numérique</span></h1>
+                <p>Retrouvez les livres, guides, documents PDF, fichiers audio et vid&eacute;os IP Center Mali.</p>
+            </div>
+            <div class="library-hero-mark" aria-hidden="true">
+                <i class="fa-solid fa-book-bookmark"></i>
+            </div>
+        </section>
+
+        <section class="library-stats" aria-label="Résumé de la bibliothèque">
+            <article class="library-stat">
+                <span class="library-stat-icon"><i class="fa-solid fa-layer-group" aria-hidden="true"></i></span>
+                <div><strong id="resourceCount">—</strong><span>Ressources</span></div>
+            </article>
+            <article class="library-stat">
+                <span class="library-stat-icon"><i class="fa-regular fa-file-pdf" aria-hidden="true"></i></span>
+                <div><strong id="documentCount">—</strong><span>Documents</span></div>
+            </article>
+            <article class="library-stat">
+                <span class="library-stat-icon"><i class="fa-solid fa-play" aria-hidden="true"></i></span>
+                <div><strong id="videoCount">—</strong><span>M&eacute;dias audio et vid&eacute;o</span></div>
+            </article>
+        </section>
+
+        <section class="library-catalog" aria-labelledby="catalogTitle">
+            <div class="library-section-heading">
+                <div>
+                    <span class="library-section-kicker">Explorer</span>
+                    <h2 id="catalogTitle">Toutes les ressources</h2>
+                </div>
+                <button class="library-refresh" id="refreshLibrary" type="button">
+                    <i class="fa-solid fa-rotate" aria-hidden="true"></i>
+                    Actualiser
+                </button>
+            </div>
+
+            <div class="library-toolbar">
+                <label class="library-search">
+                    <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                    <span class="visually-hidden">Rechercher dans la bibliothèque</span>
+                    <input id="librarySearch" type="search" placeholder="Rechercher un titre, auteur ou sujet..." autocomplete="off">
+                </label>
+                <label class="library-category-filter">
+                    <span class="visually-hidden">Filtrer par catégorie</span>
+                    <select id="categoryFilter">
+                        <option value="">Toutes les catégories</option>
+                    </select>
+                </label>
+                <label class="library-type-filter">
+                    <span class="visually-hidden">Filtrer par type de ressource</span>
+                    <select id="typeFilter">
+                        <option value="">Tous les types</option>
+                        <option value="PDF">PDF</option>
+                        <option value="Livre">Livres et guides</option>
+                        <option value="Audio">Audio</option>
+                        <option value="Vidéo">Vidéos</option>
+                        <option value="Lien">Liens</option>
+                    </select>
+                </label>
+            </div>
+
+            <p class="library-feedback" id="libraryFeedback" role="status" aria-live="polite">Vérification de votre session...</p>
+            <div class="library-grid" id="libraryGrid"></div>
+        </section>
+    </main>
+
+    <footer class="library-footer">
+        <a href="index.html">IP Center Mali</a>
+        <span>Apprendre, découvrir et progresser.</span>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/scriptsupabase.js"></script>
+    <script src="bibliotheque.js"></script>
+</body>
+</html>

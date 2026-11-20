@@ -1,0 +1,220 @@
+:root {
+    --reveal-distance: 16px;
+    --reveal-duration: 380ms;
+    --reveal-ease: ease-out;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+.reveal-slide {
+    opacity: 0;
+    transform: translate3d(0, var(--reveal-distance), 0) scale(.99);
+    filter: none;
+    transition:
+        opacity var(--reveal-duration) var(--reveal-ease),
+        transform var(--reveal-duration) var(--reveal-ease),
+        filter var(--reveal-duration) var(--reveal-ease),
+        box-shadow 280ms ease,
+        background-color 280ms ease,
+        color 280ms ease;
+    transition-delay: var(--reveal-delay, 0ms);
+    will-change: opacity, transform;
+}
+
+.reveal-slide[data-reveal-direction="left"] {
+    transform: translate3d(0, var(--reveal-distance), 0) scale(.99);
+}
+
+.reveal-slide[data-reveal-direction="right"] {
+    transform: translate3d(0, var(--reveal-distance), 0) scale(.99);
+}
+
+.reveal-slide[data-reveal-direction="top"] {
+    transform: translate3d(0, calc(var(--reveal-distance) * -1), 0) scale(.99);
+}
+
+.reveal-slide[data-reveal-direction="bottom"] {
+    transform: translate3d(0, var(--reveal-distance), 0) scale(.99);
+}
+
+.reveal-slide.is-visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotateX(0) rotateY(0) scale(1);
+    filter: blur(0);
+}
+
+.reveal-slide.is-visible[data-reveal-effect="zoom"] {
+    animation: revealZoomPulse 380ms var(--reveal-ease) both;
+}
+
+.reveal-slide.is-visible[data-reveal-effect="swing"] {
+    animation: revealCarouselSwing 380ms var(--reveal-ease) both;
+}
+
+.reveal-slide.is-visible[data-reveal-effect="float"] {
+    animation: revealFloatIn 380ms var(--reveal-ease) both;
+}
+
+.card,
+.cours-card,
+.why-box,
+.stat-card,
+.panel,
+.course-card,
+.permission-card,
+.message-card,
+.table-wrap,
+.settings-form,
+.modal-card,
+img,
+.primary-btn,
+.btn,
+.buy-btn,
+.nav-item,
+.icon-btn {
+    transition:
+        transform 260ms ease,
+        box-shadow 260ms ease,
+        border-color 260ms ease,
+        background-color 260ms ease,
+        color 260ms ease,
+        filter 260ms ease;
+}
+
+.card:hover,
+.cours-card:hover,
+.why-box:hover,
+.stat-card:hover,
+.panel:hover,
+.course-card:hover,
+.permission-card:hover,
+.message-card:hover {
+        transform: translateY(-3px);
+    box-shadow: 0 18px 42px rgba(15, 23, 42, .12);
+}
+
+.btn:hover,
+.buy-btn:hover,
+.primary-btn:hover,
+.nav-item:hover,
+.icon-btn:hover {
+    transform: translateY(-1px);
+}
+
+img:hover {
+    filter: none;
+}
+
+.slider-carousel {
+    position: relative;
+}
+
+.reveal-carousel > * {
+    opacity: 0;
+    transform: translateY(12px);
+}
+
+.reveal-carousel.is-visible > * {
+    animation: carouselSlideItem 380ms var(--reveal-ease) both;
+    animation-delay: calc(var(--item-index, 0) * 60ms);
+}
+
+.page-enter {
+    animation: pageSoftEnter 240ms ease-out both;
+}
+
+@keyframes carouselSlideItem {
+    0% {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    60% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes revealCarouselSwing {
+    0% {
+        opacity: 0;
+        transform: translateY(14px) scale(.99);
+    }
+    55% {
+        opacity: 1;
+        transform: translateY(-2px) scale(1.005);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes revealFloatIn {
+    0% {
+        opacity: 0;
+        transform: translateY(16px) scale(.99);
+    }
+    58% {
+        opacity: 1;
+        transform: translateY(-2px) scale(1.005);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes revealZoomPulse {
+    0% {
+        opacity: 0;
+        transform: scale(.99);
+    }
+    65% {
+        opacity: 1;
+        transform: scale(1.005);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+        filter: blur(0);
+    }
+}
+
+@keyframes pageSoftEnter {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    .reveal-slide,
+    .reveal-slide[data-reveal-direction],
+    .reveal-carousel > *,
+    .slider-carousel > *,
+    .page-enter {
+        opacity: 1;
+        transform: none;
+        filter: none;
+        animation: none;
+        transition: none;
+    }
+}

@@ -1,0 +1,251 @@
+:root {
+    --management-blue: #092b59;
+    --management-orange: #f59e0b;
+    --management-ink: #1e293b;
+    --management-muted: #64748b;
+    --management-line: #dbe3ee;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #f4f7fb;
+    color: var(--management-ink);
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.management-header {
+    padding: 22px max(20px, calc((100% - 1200px) / 2));
+    background: var(--management-blue);
+    color: #fff;
+}
+
+.management-header a {
+    color: #fff;
+    font-weight: 650;
+    text-decoration: none;
+}
+
+.management-header h1 {
+    margin: 14px 0 0;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+.management-main {
+    display: grid;
+    width: min(1200px, 100%);
+    gap: 18px;
+    margin: 0 auto;
+    padding: 28px 20px 56px;
+}
+
+.management-feedback {
+    margin: 0;
+    padding: 12px 15px;
+    border-left: 4px solid var(--management-orange);
+    border-radius: 7px;
+    background: #fff;
+}
+
+.management-feedback.is-error {
+    border-color: #dc2626;
+    color: #991b1b;
+}
+
+.management-card {
+    min-width: 0;
+    padding: 22px;
+    border: 1px solid var(--management-line);
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 7px 24px rgba(15, 23, 42, 0.06);
+}
+
+.management-card h2 {
+    margin: 0 0 8px;
+    color: var(--management-blue);
+    font-size: 1.25rem;
+}
+
+.management-card > p {
+    margin: 0 0 15px;
+    color: var(--management-muted);
+    line-height: 1.5;
+}
+
+.management-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    align-items: start;
+}
+
+.management-card form {
+    display: grid;
+    gap: 9px;
+}
+
+.management-card label,
+.correct-answer-label {
+    color: var(--management-blue);
+    font-size: 0.92rem;
+    font-weight: 700;
+}
+
+.management-card input,
+.management-card textarea,
+.management-card select {
+    width: 100%;
+    min-width: 0;
+    padding: 10px 11px;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    color: var(--management-ink);
+    font: inherit;
+}
+
+.management-card textarea {
+    resize: vertical;
+}
+
+.management-card input:focus,
+.management-card textarea:focus,
+.management-card select:focus {
+    outline: 3px solid rgba(37, 99, 235, 0.18);
+    border-color: #2563eb;
+}
+
+.management-button,
+.delete-item {
+    justify-self: start;
+    padding: 10px 15px;
+    border: 0;
+    border-radius: 7px;
+    background: var(--management-orange);
+    color: #fff;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 750;
+}
+
+.management-button:disabled,
+.delete-item:disabled {
+    opacity: 0.65;
+    cursor: wait;
+}
+
+#choiceFields[hidden] {
+    display: none;
+}
+
+#correctAnswerFields {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 12px;
+    border: 1px solid var(--management-line);
+    border-radius: 8px;
+}
+
+#correctAnswerFields legend {
+    padding: 0 5px;
+    color: var(--management-blue);
+    font-weight: 700;
+}
+
+#correctAnswerFields p {
+    margin: 0;
+    color: var(--management-muted);
+    font-size: 0.88rem;
+}
+
+.correct-answer-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    color: var(--management-ink);
+    font-weight: 500;
+}
+
+.correct-answer-label input {
+    width: auto;
+    margin: 3px 0 0;
+}
+
+.managed-lessons {
+    display: grid;
+    gap: 12px;
+}
+
+.managed-lesson {
+    padding: 15px;
+    border: 1px solid var(--management-line);
+    border-radius: 9px;
+}
+
+.managed-lesson h3 {
+    margin: 0 0 8px;
+    color: var(--management-blue);
+}
+
+.managed-lesson ul {
+    display: grid;
+    gap: 7px;
+    margin: 10px 0;
+    padding-left: 20px;
+}
+
+.managed-question {
+    overflow-wrap: anywhere;
+}
+
+.student-answer {
+    overflow-wrap: anywhere;
+}
+
+.student-answer p {
+    margin: 6px 0;
+}
+
+.lesson-grading-form {
+    display: flex !important;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: 10px !important;
+    margin-top: 14px;
+}
+
+.lesson-grading-form label {
+    flex: 1 1 100%;
+}
+
+.lesson-grading-form textarea {
+    min-height: 76px;
+}
+
+.lesson-grading-form button {
+    justify-self: start;
+}
+
+.delete-item {
+    padding: 6px 10px;
+    background: #b91c1c;
+    font-size: 0.85rem;
+}
+
+.empty-list {
+    color: var(--management-muted);
+}
+
+@media (max-width: 760px) {
+    .management-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .management-card {
+        padding: 17px;
+    }
+}

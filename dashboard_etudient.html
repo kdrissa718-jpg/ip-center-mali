@@ -6,122 +6,146 @@
     <title>IP Center Mali - Espace Étudiant</title>
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="css/index.css">
-    <link rel="stylesheet" href="css/dashboard-etudiant.css">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/dashboard_etudient.css">
+    <link rel="stylesheet" href="css/modalite_playlist.css">
+    <link rel="stylesheet" href="css/scroll-animations.css">
+
 </head>
 
-<body>
-    <!-- ===== HEADER ===== -->
-    <header>
-        <h1>🎓 Espace Étudiant - IP Center Mali</h1>
-        <div>Bienvenue dans votre tableau de bord</div>
+<body data-required-role="student">
+    <header class="dashboard-header">
+        <div class="header-inner">
+            <div class="logo">
+                <a href="index.html"><img src="6026e96b-b829-48f0-ae0b-506f5b40e573.png" alt="IP Center Mali"></a>
+            </div>
+            <div>
+                <h1 class="dashboard-page-title">Espace Étudiant - IP Center Mali</h1>
+            </div>
+        </div>
     </header>
 
-    <!-- ===== MAIN CONTAINER ===== -->
-    <div class="container">
-
-        <!-- ===== SIDEBAR NAVIGATION ===== -->
-        <aside class="sidebar-card">
-            <div class="sidebar-header">
-                <h3>📋 Navigation</h3>
+    <div class="student-layout">
+        <aside class="student-sidebar">
+            <div class="brand">
+                <img src="6026e96b-b829-48f0-ae0b-506f5b40e573.png" alt="IP Center Mali">
+                <span>Étudiant</span>
             </div>
-            <nav class="sidebar-nav">
-                <button class="nav-btn active" onclick="show('courses', this)">
-                    <i class="fas fa-book"></i>
-                    <span>Tous les cours</span>
-                </button>
-                <button class="nav-btn" onclick="show('my', this)">
-                    <i class="fas fa-shopping-bag"></i>
-                    <span>Mes achats</span>
-                </button>
-                <button class="nav-btn" onclick="show('ask', this)">
-                    <i class="fas fa-question-circle"></i>
-                    <span>Mes questions</span>
-                </button>
-                <a href="Index.html" class="nav-logout">
-                    <i class="fas fa-power-off"></i>
-                    <span>Déconnexion</span>
-                </a>
+            <nav class="dashboard-nav" aria-label="Navigation étudiant">
+                <button class="nav-btn active" data-target="courses" aria-label="Catalogue des cours" type="button"><i class="fa-solid fa-compass"></i><span>Catalogue des cours</span></button>
+                <button class="nav-btn" data-target="formations-disponibles" aria-label="Formations disponibles" type="button"><i class="fa-solid fa-layer-group"></i><span>Formations disponibles</span></button>
+                <button class="nav-btn" data-target="my" aria-label="Mon apprentissage" type="button"><i class="fa-solid fa-book-open"></i><span>Mon apprentissage</span></button>
+                <button class="nav-btn" data-target="ask" aria-label="Mes questions" type="button"><i class="fa-regular fa-comments"></i><span>Mes questions</span></button>
             </nav>
+            <button class="logout-btn" type="button" data-action="logout"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>Se déconnecter</span></button>
         </aside>
 
-        <!-- ===== MAIN CONTENT ===== -->
-        <div class="main">
-
-            <!-- Tous les Cours -->
-            <div id="courses" class="content-section">
-                <h2>📚 Tous les cours disponibles</h2>
-                <div id="coursesContainer"></div>
-            </div>
-
-            <!-- Mes Achats -->
-            <div id="my" class="content-section" style="display:none;">
-                <h2>🛍️ Mes achats</h2>
-                <div id="purchasesContainer" class="auto-list"></div>
-            </div>
-
-            <!-- Questions aux Professeurs -->
-            <div id="ask" class="content-section" style="display:none;">
-                <h2>❓ Vos questions</h2>
-                <div class="question-form">
-                    <input type="text" id="questionCourse" placeholder="Nom du cours...">
-                    <textarea id="questionText" placeholder="Écrivez votre question ici..."></textarea>
-                    <button type="button" onclick="sendQuestion()">✉️ Envoyer la question</button>
+        <main class="student-main">
+            <section class="dashboard-welcome" aria-labelledby="studentWelcomeTitle">
+                <div class="welcome-copy">
+                    <span class="welcome-eyebrow"><i class="fa-solid fa-sparkles"></i> Votre espace d’apprentissage</span>
+                    <h2 id="studentWelcomeTitle">Bonjour <span id="studentWelcomeName">Étudiant</span> 👋</h2>
+                    <p>Reprenez votre parcours, découvrez un nouveau cours ou retrouvez vos supports au même endroit.</p>
+                    <div class="welcome-actions">
+                        <button class="welcome-btn" data-target="my" type="button"><i class="fa-solid fa-play"></i> Continuer mon apprentissage</button>
+                        <button class="welcome-btn secondary" data-target="courses" type="button">Explorer le catalogue</button>
+                    </div>
                 </div>
-                <div id="questionsContainer" class="auto-list"></div>
-            </div>
+                <div class="welcome-mark" aria-hidden="true"><i class="fa-solid fa-graduation-cap"></i></div>
+            </section>
 
-        </div>
+            <section class="dashboard-overview" aria-label="Résumé de votre activité">
+                <article class="overview-card">
+                    <span>Cours au catalogue</span>
+                    <strong id="studentCourseCount">0</strong>
+                    <i class="fa-solid fa-book"></i>
+                </article>
+                <article class="overview-card">
+                    <span>Mon apprentissage</span>
+                    <strong id="studentLearningCount">0</strong>
+                    <i class="fa-solid fa-rocket"></i>
+                </article>
+                <article class="overview-card">
+                    <span>Exercices à suivre</span>
+                    <strong id="studentPendingCount">0</strong>
+                    <i class="fa-solid fa-list-check"></i>
+                </article>
+            </section>
 
+            <section id="courses" class="panel active">
+                <div class="panel-header">
+                    <div>
+                        <span class="panel-kicker">À découvrir</span>
+                        <h2>Tous les cours</h2>
+                    </div>
+                    <div class="catalog-tools">
+                        <label class="catalog-search">
+                            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                            <span class="visually-hidden">Rechercher un cours</span>
+                            <input id="courseSearch" type="search" placeholder="Rechercher un cours..." autocomplete="off">
+                        </label>
+                        <button class="catalog-refresh-btn" id="refreshCourseCatalog" type="button">
+                            <i class="fa-solid fa-rotate" aria-hidden="true"></i>
+                            Actualiser
+                        </button>
+                    </div>
+                </div>
+                <p id="courseCatalogFeedback" class="catalog-feedback" role="status" aria-live="polite" hidden></p>
+                <div id="coursesContainer" class="courses-grid"></div>
+            </section>
+
+            <section id="formations-disponibles" class="panel">
+                <div class="panel-header">
+                    <div>
+                        <span class="panel-kicker">Parcours thématiques</span>
+                        <h2>Formations disponibles</h2>
+                    </div>
+                </div>
+                <label class="formation-search-label" for="recherche-formations-dashboard">Rechercher une formation</label>
+                <input id="recherche-formations-dashboard" class="formation-search" type="search" placeholder="Nom, catégorie ou description..." autocomplete="off">
+                <div id="formationsDashboardContainer" class="dashboard-formations"></div>
+            </section>
+
+            <section id="my" class="panel">
+                <div class="panel-header">
+                    <div>
+                        <span class="panel-kicker">Votre espace de travail</span>
+                        <h2>Mon apprentissage</h2>
+                    </div>
+                </div>
+                <div id="purchasesContainer"></div>
+            </section>
+
+            <section id="ask" class="panel">
+                <div class="panel-header">
+                    <div>
+                        <span class="panel-kicker">Échange pédagogique</span>
+                        <h2>Mes questions</h2>
+                    </div>
+                    <button class="catalog-refresh-btn" id="refreshStudentQuestions" type="button">
+                        <i class="fa-solid fa-rotate" aria-hidden="true"></i>
+                        Actualiser
+                    </button>
+                </div>
+                <div class="question-form question-form--dashboard">
+                    <label for="questionCourse">Cours concerné</label>
+                    <select id="questionCourse" required>
+                        <option value="">Choisissez un cours...</option>
+                    </select>
+                    <label for="questionText">Votre question</label>
+                    <textarea id="questionText" placeholder="Écrivez votre question ici..." required></textarea>
+                    <button type="button" class="buy-btn" data-action="send-question">✉️ Envoyer la question</button>
+                </div>
+                <div id="questionsContainer"></div>
+            </section>
+        </main>
     </div>
 
-    <!-- ===== FOOTER ===== -->
-    <footer>
-        <div class="footer-content">
-            <div class="footer-logo">
-                <a href="index.html"><img src="6026e96b-b829-48f0-ae0b-506f5b40e573.png" alt="IP Center Mali"></a>
-                <p>Centre de Formation Professionnelle & Informatique</p>
-            </div>
-
-            <div class="footer">
-                <h2>📞 IP CENTER MALI</h2>
-                <p>
-                    +223 92 48 87 30<br>
-                    +223 95 50 60 62<br>
-                    <a href="mailto:kdrissa718@gmail.com">✉ kdrissa718@gmail.com</a>
-                </p>
-            </div>
-
-            <div class="footer">
-                <h2>🌐 Suivez-nous</h2>
-                <div class="socials">
-                    <a href="https://www.facebook.com/ipcentermali" target="_blank" aria-label="Facebook IP Center Mali">
-                        <i class="fab fa-facebook"></i>
-                    </a>
-                    <a href="https://www.instagram.com/ipcentermali" target="_blank" aria-label="Instagram IP Center Mali">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                    <a href="https://www.linkedin.com/company/ipcentermali" target="_blank" aria-label="LinkedIn IP Center Mali">
-                        <i class="fab fa-linkedin"></i>
-                    </a>
-                    <a href="https://www.youtube.com/channel/UCN7vC5JZ5X5X5X5X5X5X5X5" target="_blank" aria-label="YouTube IP Center Mali">
-                        <i class="fab fa-youtube"></i>
-                    </a>
-                    <a href="https://twitter.com/ipcentermali" target="_blank" aria-label="Twitter IP Center Mali">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <a href="https://www.tiktok.com/@ipcentermali" target="_blank" aria-label="TikTok IP Center Mali">
-                        <i class="fab fa-tiktok"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="copyright">© 2026 IP Center Mali - Tous droits réservés.</div>
-    </footer>
-
-    <!-- ===== EXTERNAL SCRIPTS ===== -->
+    <script src="https://unpkg.com/docx@8.5.0/build/index.umd.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="scriptsupabase.js"></script>
-    <script src="js/dashboard-etudiant.js"></script>
+    <script src="js/scriptsupabase.js"></script>
+    <script src="js/modalite_playlist.js"></script>
+    <script src="js/auth-guard.js"></script>
+    <script src="js/dashboard_etudient.js"></script>
 </body>
 </html>

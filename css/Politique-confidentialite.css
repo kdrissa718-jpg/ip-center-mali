@@ -311,3 +311,83 @@ body{
     }
 
 }
+
+body {
+    background: #f3f6fb;
+    color: #10203a;
+    animation: none;
+}
+
+.policy-container {
+    width: min(100%, 1000px);
+    padding: 48px;
+    border: 1px solid #dbe3ef;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 20px 55px rgba(15, 23, 42, 0.08);
+    animation: none;
+}
+
+.policy-label {
+    padding: 8px 12px;
+    border-radius: 4px;
+    background: #e7f0ff;
+    color: #004aad;
+    letter-spacing: 0.08em;
+    animation: none;
+}
+
+.policy-title {
+    margin: 18px 0;
+    color: #10203a;
+    font-size: 40px;
+    line-height: 1.12;
+    animation: none;
+}
+
+.policy-intro {
+    color: #44576f;
+    font-size: 17px;
+    animation: none;
+}
+
+.policy-section {
+    margin-top: 24px;
+    padding: 22px 0 0;
+    border: 0;
+    border-top: 1px solid #dbe3ef;
+    border-radius: 0;
+    background: transparent;
+    opacity: 1;
+    animation: none;
+    transition: none;
+}
+
+.policy-section:hover {
+    transform: none;
+    background: transparent;
+    box-shadow: none;
+}
+
+.policy-section h2 {
+    color: #10203a;
+    font-size: 20px;
+}
+
+.policy-section p {
+    color: #55647d;
+}
+
+.policy-section a {
+    color: #004aad;
+}
+
+@media(max-width:768px) {
+    .policy-container {
+        padding: 28px 20px;
+    }
+
+    .policy-title {
+        font-size: 30px;
+    }
+}

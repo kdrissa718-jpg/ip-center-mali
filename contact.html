@@ -5,18 +5,20 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Contact - IP Center Mali</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<link rel="stylesheet" href="css/index.css">
+<link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/contact.css">
+    <link rel="stylesheet" href="css/scroll-animations.css">
 </head>
 <body>
 <header>
     <div class="header-inner">
-        <div class="logo"><a href="index.html"><img src="6026e96b-b829-48f0-ae0b-506f5b40e573.png" style="height:54px;width:auto" alt="IP Center Mali"></a></div>
+        <div class="logo"><a href="index.html"><img src="6026e96b-b829-48f0-ae0b-506f5b40e573.png" alt="IP Center Mali"></a></div>
         <nav>
             <a href="index.html">Accueil</a>
             <a href="inscription.html">Inscription</a>
+            <a href="bibliotheque.html">Bibliothèque</a>
             <a href="contact.html" class="active">Contact</a>
             <a href="service.html">Services</a>
-            <a href="portfolio.html">Portfolio</a>
             <a href="login.html" class="nav-login">Connexion</a>
         </nav>
     </div>
@@ -35,28 +37,28 @@
     <div class="container">
         <div class="info-cards">
             <div class="info-card">
-                <div class="info-icon" style="background:linear-gradient(135deg, #004aad, #0066cc)">
+                <div class="info-icon contact-info-icon info-icon-blue">
                     <i class="fas fa-map-marker-alt"></i>
                 </div>
                 <h3>Localisation</h3>
                 <p>Bamako - Mali</p>
-                <p style="color:#aaa;font-size:13px">Rue de la Paix, centre-ville</p>
+                <p class="contact-note">Rue de la Paix, centre-ville</p>
             </div>
             <div class="info-card">
-                <div class="info-icon" style="background:linear-gradient(135deg, #ff6a00, #ff9900)">
+                <div class="info-icon contact-info-icon info-icon-orange">
                     <i class="fas fa-phone-alt"></i>
                 </div>
                 <h3>Téléphone</h3>
                 <p><a href="tel:+22392488730">+223 92 48 87 30</a></p>
-                <p style="color:#aaa;font-size:13px">Disponible 24/7</p>
+                <p class="contact-note">Disponible 24/7</p>
             </div>
             <div class="info-card">
-                <div class="info-icon" style="background:linear-gradient(135deg, #16a34a, #22c55e)">
+                <div class="info-icon contact-info-icon info-icon-green">
                     <i class="fas fa-envelope"></i>
                 </div>
                 <h3>Email</h3>
                 <p><a href="mailto:kdrissa718@gmail.com">kdrissa718@gmail.com</a></p>
-                <p style="color:#aaa;font-size:13px">Réponse sous 24h</p>
+                <p class="contact-note">Réponse sous 24h</p>
             </div>
         </div>
     </div>
@@ -80,6 +82,11 @@
                     <div class="form-group">
                         <label for="email">Email</label>
                         <input type="email" id="email" name="email" placeholder="votre@email.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Numéro de téléphone</label>
+                        <input type="tel" id="phone" name="phone" autocomplete="tel" placeholder="Ex. +223 70 00 00 00" required>
                     </div>
 
                     <div class="form-group">
@@ -107,7 +114,7 @@
             <!-- Chat Section -->
             <div class="chat-section">
                 <h2>Support par chat</h2>
-                <p class="form-subtitle">Discutez avec nous en temps réel</p>
+                <p class="form-subtitle">Envoyez un message à notre équipe</p>
                 
                 <div class="chat-container">
                     <div class="chat-messages" id="messages" aria-live="polite">
@@ -115,7 +122,7 @@
                     </div>
 
                     <div class="chat-input-area">
-                        <div style="margin-bottom:12px">
+                        <div class="chat-message-field">
                             <textarea id="messageText" rows="2" placeholder="Écrivez votre message..." class="message-input"></textarea>
                         </div>
 
@@ -123,7 +130,7 @@
                             <label class="btn-attach" for="attachAudio" title="Joindre audio">
                                 <i class="fas fa-paperclip"></i>
                             </label>
-                            <input id="attachAudio" type="file" accept="audio/*" style="display:none">
+                            <input id="attachAudio" class="chat-file-input" type="file" accept="audio/*">
                             
                             <button id="recordBtn" class="btn-record" title="Enregistrer un audio">
                                 <i class="fas fa-microphone"></i>
@@ -143,7 +150,7 @@
 <!--Supabase-->
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="scriptsupabase.js"></script>
+    <script src="js/scriptsupabase.js"></script>
 
 
 <footer>
@@ -205,5 +212,6 @@
 </a>
 
 <script src="js/contact.js"></script>
+    <script src="js/scroll-animations.js"></script>
 </body>
 </html>
