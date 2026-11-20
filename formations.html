@@ -8,15 +8,17 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="css/formations.css">
   <link rel="stylesheet" href="css/modalite_playlist.css">
+  <link rel="stylesheet" href="css/mobile-nav.css">
 </head>
 <body>
-  <header>
+  <header class="has-mobile-menu">
      
         <div class="header-inner">
             <div class="logo">
            <a href="index.html"><img src="6026e96b-b829-48f0-ae0b-506f5b40e573.png" alt="IP Center Mali"></a>
             </div>
-            <nav>
+            <button class="mobile-menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false"><span></span><span></span><span></span></button>
+            <nav aria-label="Navigation principale">
             <a href="index.html">Accueil</a>
             <a href="service.html">Services</a>
             <a href="formations.html">Formations</a>
@@ -47,5 +49,6 @@
 <script src="js/scriptsupabase.js"></script>
 <script src="js/modalite_playlist.js"></script>
 <script src="js/formations.js"></script>
+<script src="js/mobile-nav.js"></script>
 </body>
 </html>

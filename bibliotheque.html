@@ -9,13 +9,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="bibliotheque.css">
+    <link rel="stylesheet" href="css/mobile-nav.css">
 </head>
 <body class="library-page">
-    <header class="library-header">
+    <header class="library-header has-mobile-menu">
         <div class="library-nav">
             <a class="library-brand" href="index.html" aria-label="IP Center Mali, accueil">
                 <img src="6026e96b-b829-48f0-ae0b-506f5b40e573.png" alt="IP Center Mali">
             </a>
+            <button class="mobile-menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false"><span></span><span></span><span></span></button>
             <nav aria-label="Navigation principale">
                 <a href="index.html">Accueil</a>
                 <a href="service.html">Services</a>
@@ -107,5 +109,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/scriptsupabase.js"></script>
     <script src="bibliotheque.js"></script>
+<script src="js/mobile-nav.js"></script>
 </body>
 </html>
