@@ -16,6 +16,17 @@ function defilerDescription(description, direction) {
     description.scrollTo({ top: destination, behavior: "smooth" });
 }
 
+async function obtenirUtilisateurCourant() {
+    const { data: sessionData, error: sessionError } =
+        await window.supabaseClient.auth.getSession();
+    if (sessionError) throw sessionError;
+    if (!sessionData?.session) return null;
+
+    const { data, error } = await window.supabaseClient.auth.getUser();
+    if (error) throw error;
+    return data?.user || null;
+}
+
 async function chargerFormations() {
     const message = document.getElementById("message");
     const conteneur = document.getElementById("formations");
@@ -27,10 +38,8 @@ async function chargerFormations() {
             throw new Error("Le client Supabase n'est pas initialisé.");
         }
 
-        const { data: sessionData, error: sessionError } =
-            await window.supabaseClient.auth.getUser();
-        if (sessionError) throw sessionError;
-        const utilisateurId = sessionData?.user?.id;
+        const utilisateur = await obtenirUtilisateurCourant();
+        const utilisateurId = utilisateur?.id;
         let utilisateurRole = "";
         if (utilisateurId) {
             const { data: profile } = await window.supabaseClient.from("profiles")
@@ -228,10 +237,7 @@ async function chargerFormations() {
             boutonInscription.addEventListener("click", async () => {
                 boutonInscription.disabled = true;
                 try {
-                    const { data: authData, error: authError } =
-                        await window.supabaseClient.auth.getUser();
-                    if (authError) throw authError;
-                    const utilisateur = authData?.user;
+                    const utilisateur = await obtenirUtilisateurCourant();
                     if (!utilisateur) {
                         window.location.href = `login.html?formation=${encodeURIComponent(idFormation)}`;
                         return;
@@ -335,8 +341,7 @@ async function chargerFormations() {
             if (!link) return;
             event.preventDefault();
             try {
-                const userResult = await window.supabaseClient.auth.getUser();
-                const user = userResult.data?.user;
+                const user = await obtenirUtilisateurCourant();
                 if (!user) {
                     window.location.href = `login.html?formation=${encodeURIComponent(link.dataset.playlistFormation)}`;
                     return;
