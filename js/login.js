@@ -1,5 +1,71 @@
 
 document.addEventListener("DOMContentLoaded", () => {
+
+    // ==========================================
+    // RÉINITIALISATION DU MOT DE PASSE
+    // ==========================================
+
+    const forgotPasswordBtn = document.getElementById("forgotPasswordBtn");
+    const resetMessage = document.getElementById("resetMessage");
+
+    if (forgotPasswordBtn) {
+        forgotPasswordBtn.addEventListener("click", async () => {
+            const client = window.supabaseClient;
+
+            const email = document.querySelector(
+                '#loginForm input[type="email"]'
+            )?.value.trim();
+
+            if (!client) {
+                alert("Connexion à Supabase indisponible.");
+                return;
+            }
+
+            if (!email) {
+                if (resetMessage) {
+                    resetMessage.textContent =
+                        "Veuillez saisir votre adresse e-mail.";
+                    resetMessage.style.color = "#b91c1c";
+                }
+                return;
+            }
+
+            forgotPasswordBtn.disabled = true;
+            forgotPasswordBtn.textContent = "Envoi en cours...";
+
+            resetMessage.textContent = "";
+
+            try {
+                const { error } =
+                    await client.auth.resetPasswordForEmail(email, {
+                        redirectTo:
+                            "https://ip-center-mali.vercel.app/reset-password.html"
+                    });
+
+                if (error) throw error;
+
+                resetMessage.textContent =
+                    "Si cette adresse correspond à un compte, un e-mail de récupération sera envoyé.";
+
+                resetMessage.style.color = "#166534";
+
+            } catch (error) {
+                console.error("Erreur de récupération :", error);
+
+                resetMessage.textContent =
+                    error.message || "Erreur lors de l'envoi du lien.";
+
+                resetMessage.style.color = "#b91c1c";
+
+            } finally {
+                forgotPasswordBtn.disabled = false;
+                forgotPasswordBtn.textContent =
+                    "Mot de passe oublié ?";
+            }
+        });
+    }
+
+
     const loginForm = document.getElementById("loginForm");
 
     if (!loginForm) {
